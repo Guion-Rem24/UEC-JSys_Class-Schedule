@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:stretchColumns="1"
+    tools:showIn="@layout/fragment_home">
+<!--参考  : https://akira-watson.com/android/tablelayout.html
+          : http://androidguide.nomaki.jp/html/layout/tablelayout/addrow.html
+          : http://androidhacker.blog94.fc2.com/blog-entry-60.html -->
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_column="1"
+                android:text="test1"
+                android:padding="3dip" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="test2"
+                android:gravity="end"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
