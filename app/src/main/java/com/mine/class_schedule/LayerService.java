@@ -92,7 +92,11 @@ public class LayerService extends Service {
 
         textView = new TextView(this);
         textView.setText("LockScreen Text");
-        textView.setTextColor(ContextCompat.getColor(this, android.R.color.black));
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            textView.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        }else{
+            textView.setTextColor(ContextCompat.getColor(this, android.R.color.black));
+        }
         textView.setTextSize(32f);
 
         text_params = new WindowManager.LayoutParams(

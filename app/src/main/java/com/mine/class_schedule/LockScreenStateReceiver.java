@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,6 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+
+// https://gist.github.com/daichan4649/5352944
+// https://stackoverflow.com/questions/35327328/android-overlay-textview-on-lockscreen
+// Overlay on LockScreen
+
+// API <= 25 では機能する(TYPE_SYSTEM_OVERLAY)
+// API 26以降，TYPE_SYSTEM_OVERLAYはpermission deniedされている
+
+// API 26以降も Overlay on Lock Screenをやりたければ，System Appとすれば良い？
+// 参考:
+// https://speakerdeck.com/shinjikobayashi/systemapurikai-fa-ru-men?slide=50
+// http://exception-think.hatenablog.com/entry/20170530/1496154600
 
 
 public class LockScreenStateReceiver extends BroadcastReceiver {
@@ -33,6 +48,7 @@ public class LockScreenStateReceiver extends BroadcastReceiver {
         windowManager = wm; view = v; inflater = inf;
     }
 
+//    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -42,7 +58,8 @@ public class LockScreenStateReceiver extends BroadcastReceiver {
                 params = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+//                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                        WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN |
 //                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 //                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
@@ -55,6 +72,8 @@ public class LockScreenStateReceiver extends BroadcastReceiver {
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                                 | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                         PixelFormat.TRANSLUCENT
                 );
