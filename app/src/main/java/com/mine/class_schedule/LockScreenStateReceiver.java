@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 // 参考:
 // https://speakerdeck.com/shinjikobayashi/systemapurikai-fa-ru-men?slide=50
 // http://exception-think.hatenablog.com/entry/20170530/1496154600
+// https://www.3ace-net.co.jp/blog/201505112239.html
 
 
 public class LockScreenStateReceiver extends BroadcastReceiver {
@@ -55,11 +56,13 @@ public class LockScreenStateReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             //if screen is turn off show the textview
             if (!LayerService.isShowing) {
-                params = new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
+                // API 25 or before
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    params = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            WindowManager.LayoutParams.WRAP_CONTENT,
 //                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                        WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN |
 //                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 //                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
@@ -69,14 +72,37 @@ public class LockScreenStateReceiver extends BroadcastReceiver {
 //                        WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
 //                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 //                ,
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                                | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                        PixelFormat.TRANSLUCENT
-                );
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                                    | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                            PixelFormat.TRANSLUCENT
+                    );
+                } else { // API 26 or later
+                    params = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN |
+//                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+//                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+//                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+//                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+//                        WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
+//                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+//                ,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                                    | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                            PixelFormat.TRANSLUCENT
+                    );
+                }
                 params.gravity = Gravity.BOTTOM;
 
                 windowManager.addView(textView, params);

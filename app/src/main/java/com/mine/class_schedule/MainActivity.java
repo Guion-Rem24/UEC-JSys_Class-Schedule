@@ -35,6 +35,11 @@ import java.util.List;
  // https://mura-hiro.com/android-dev-sample-alarm-clock/
  // https://akira-watson.com/android/alarmmanager-timer.html
 
+/**
+ * cite for System app
+ * https://stackoverflow.com/questions/45995322/oreo-api-26-drawoverlay-draw-over-status-bar
+ */
+
 public class MainActivity extends AppCompatActivity{
 
 

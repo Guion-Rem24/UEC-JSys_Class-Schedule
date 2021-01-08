@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,11 +14,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.mine.class_schedule.ClassTableView;
 import com.mine.class_schedule.R;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "HOMEFRAGMENT";
     private HomeViewModel homeViewModel;
+    private ClassTableView classTableView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -38,6 +41,19 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        classTableView = root.findViewById(R.id.table_classView);
+//        String class_text = classTableView.getClassText(0,0);
+
+        classTableView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "(w, h = "+classTableView.getWidth()+", "+classTableView.getHeight()+")");
+//                Log.d(TAG, "certain class: "+class_text);
+            }
+        });
+//        ClassTableView = new ClassTableView(getContext());
+
         Log.v(TAG, "====on CreateView ====");
         return root;
     }

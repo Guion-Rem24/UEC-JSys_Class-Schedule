@@ -23,6 +23,8 @@ import com.mine.class_schedule.LayerService;
 import com.mine.class_schedule.MainActivity;
 import com.mine.class_schedule.R;
 
+import java.util.Objects;
+
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
@@ -82,9 +84,9 @@ public class DashboardFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), LayerService.class);
 //                    intent.setAction("user.clicked.overlay.button");
                     //                Intent intent = new Intent( "user.clicked.overlay.button");
-                    LocalBroadcastManager bcManager = LocalBroadcastManager.getInstance(getActivity());
+                    LocalBroadcastManager bcManager = LocalBroadcastManager.getInstance(requireActivity()); // .getInstance(getActivity());
                     bcManager.sendBroadcast(intent);
-                    getActivity().startService(intent);
+                    requireActivity().startService(intent); // getActivity().startService(intent)
                 }
             }
         });
