@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    参考
+    https://qiita.com/kaleidot725/items/b1f345974bf3e562f672
+    -->
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:colorControlHighlight">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#bbffbb" />
+        </shape>
+    </item>
+</ripple>

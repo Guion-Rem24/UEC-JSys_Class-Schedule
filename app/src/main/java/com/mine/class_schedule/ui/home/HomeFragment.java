@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -15,12 +16,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.mine.class_schedule.ClassTableView;
+import com.mine.class_schedule.ClassView;
 import com.mine.class_schedule.R;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "HOMEFRAGMENT";
     private HomeViewModel homeViewModel;
     private ClassTableView classTableView;
+    private View root;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -33,7 +36,7 @@ public class HomeFragment extends Fragment {
         getActivity().setTitle("Home");
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -43,16 +46,23 @@ public class HomeFragment extends Fragment {
         });
 
         classTableView = root.findViewById(R.id.table_classView);
-//        String class_text = classTableView.getClassText(0,0);
 
         classTableView.post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "(w, h = "+classTableView.getWidth()+", "+classTableView.getHeight()+")");
-//                Log.d(TAG, "certain class: "+class_text);
             }
         });
-//        ClassTableView = new ClassTableView(getContext());
+
+        Button sampleButton = root.findViewById(R.id.sample_button);
+        sampleButton.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                ClassView view = classTableView.getClass(0,0);
+                view.setBackgroundColor(getResources().getColor(R.color.black,null));
+            }
+
+        });
 
         Log.v(TAG, "====on CreateView ====");
         return root;

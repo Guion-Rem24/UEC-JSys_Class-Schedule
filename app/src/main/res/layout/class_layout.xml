@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.mine.class_schedule.ClassView
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
-
-</merge>
+<com.mine.class_schedule.ClassView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/classtable_row"
+    android:layout_height="wrap_content"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:background="@drawable/ripple_background"/>

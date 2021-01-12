@@ -3,35 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
-    <com.mine.class_schedule.ClassView
+    <include
         android:id="@+id/day_0"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <com.mine.class_schedule.ClassView
+        layout="@layout/class_layout"/>
+    <include
         android:id="@+id/day_1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <com.mine.class_schedule.ClassView
+        layout="@layout/class_layout"/>
+    <include
         android:id="@+id/day_2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <com.mine.class_schedule.ClassView
+        layout="@layout/class_layout"/>
+    <include
         android:id="@+id/day_3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <com.mine.class_schedule.ClassView
+        layout="@layout/class_layout"/>
+    <include
         android:id="@+id/day_4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <com.mine.class_schedule.ClassView
+        layout="@layout/class_layout"/>
+    <include
         android:id="@+id/day_5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        layout="@layout/class_layout" />
 
 </LinearLayout>

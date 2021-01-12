@@ -49,9 +49,15 @@ public class ClassTableView extends TableLayout {
             if(id != 0) tableRow[p] = (ClassRowView) root.findViewById(id);
             for(int day=0;day<6;day++){
                 int dayId = getResources().getIdentifier("day_"+day, "id", context.getPackageName());
-                if(dayId != 0 && tableRow[p] != null) classes[p][day] = tableRow[p].findViewById(dayId);
+                if(dayId != 0 && tableRow[p] != null) {
+                    classes[p][day] = (ClassView) tableRow[p].findViewById(dayId);
+                    Log.d(TAG, p+","+day+"="+dayId);
+                }
                 String class_text = "class "+p+" on "+day;
                 classes[p][day].setText(class_text);
+                classes[p][day].setPeriodId(p);
+                classes[p][day].setDayId(day);
+                Log.d(TAG, "id:"+classes[p][day].getPosId());
             }
         }
 
@@ -59,6 +65,10 @@ public class ClassTableView extends TableLayout {
 
     public String getClassText(int day, int time){
         return classes[day][time].getText().toString();
+    }
+
+    public ClassView getClass(int day, int period){
+        return classes[period][day];
     }
 
 

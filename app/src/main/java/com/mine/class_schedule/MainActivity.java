@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity{
         current_pointer_ = this;
         navView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.main_toolbar);
-        toolbar.setTitle("main");
+        toolbar.setTitle("Home");
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         setSupportActionBar(toolbar);
         pagerAdapter = new ViewPagerAdapter(this);
