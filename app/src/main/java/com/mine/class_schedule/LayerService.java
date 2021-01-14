@@ -45,7 +45,7 @@ public class LayerService extends Service {
 //
 //    @Override
 //    public IBinder onBind(Intent intent) {
-//        // TODO: Return the communication channel to the service.
+//        // Return the communication channel to the service.
 //        throw new UnsupportedOperationException("Not yet implemented");
 //    }
     private static final String TAG = "LayoutService";
@@ -202,7 +202,7 @@ public class LayerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         return null;
     }
 

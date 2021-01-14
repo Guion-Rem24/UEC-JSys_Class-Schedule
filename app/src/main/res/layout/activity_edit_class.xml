@@ -6,7 +6,7 @@
     android:id="@+id/activity_edit_class"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditClassActivity">
+    tools:context=".View.EditClassActivity">
 
 
 
@@ -91,8 +91,20 @@
             android:hint="講義場所..." />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_finish_editing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:clickable="true"
+        android:focusable="true" />
 
-<!--    <Button-->
+
+    <!--    <Button-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/edittext_online_url_layout"-->

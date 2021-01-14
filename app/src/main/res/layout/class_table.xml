@@ -13,19 +13,19 @@
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content">-->
 <!--        <TableRow>-->
-<!--            <com.mine.class_schedule.ClassView-->
+<!--            <com.mine.class_schedule.ui.classview.ClassView-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_weight="1"-->
 <!--                android:layout_column="1"-->
 <!--                android:text="test1"-->
 <!--                android:padding="3dip" />-->
-<!--            <com.mine.class_schedule.ClassView-->
+<!--            <com.mine.class_schedule.ui.classview.ClassView-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_weight="1"-->
 <!--                android:text="test2"-->
 <!--                android:gravity="end"-->
 <!--                android:padding="3dip" />-->
-<!--            <com.mine.class_schedule.ClassView-->
+<!--            <com.mine.class_schedule.ui.classview.ClassView-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_weight="1"-->
@@ -33,7 +33,7 @@
 <!--                android:padding="3dip" />-->
 <!--        </TableRow>-->
 <!--    </TableLayout>-->
-    <com.mine.class_schedule.ClassTableView
+    <com.mine.class_schedule.ui.classview.ClassTableView
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

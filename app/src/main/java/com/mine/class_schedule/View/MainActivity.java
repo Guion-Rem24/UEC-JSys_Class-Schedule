@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.View;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -25,9 +25,15 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.R;
+import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 import com.mine.class_schedule.ui.dashboard.DashboardFragment;
+import com.mine.class_schedule.ui.dashboard.DashboardViewModel;
 import com.mine.class_schedule.ui.home.HomeFragment;
+import com.mine.class_schedule.ui.home.HomeViewModel;
 import com.mine.class_schedule.ui.notifications.NotificationsFragment;
+import com.mine.class_schedule.ui.notifications.NotificationsViewModel;
 
 import java.util.List;
 
@@ -49,6 +55,10 @@ public class MainActivity extends AppCompatActivity{
         public static final int Notification=2;
     }
 
+    private HomeViewModel homeViewModel;
+    private DashboardViewModel dashboardViewModel;
+    private NotificationsViewModel notificationsViewModel;
+
     private static final String TAG = "MainActivity";
     private ViewPager2 viewPager;
     private ViewPagerAdapter pagerAdapter;
@@ -60,6 +70,7 @@ public class MainActivity extends AppCompatActivity{
     private static Toolbar toolbar;
     public static MainActivity current_pointer_;
     public final static int REQUEST_SYSTEM_OVERLAY = 1;
+    public static final int REQUEST_CODE_EDIT_CLASS = 10;
     private static ActivityManager am;
 
     @Override
@@ -175,15 +186,41 @@ public class MainActivity extends AppCompatActivity{
             viewPager.setCurrentItem(FragNum.DashBoard, false);
 //            if(checkOverlayPermission()) {
 //                /**
-//                 *  TODO:適宜処理
+//                 *
 //                 */
 //            }
 
         }
+
+        if (requestCode == REQUEST_CODE_EDIT_CLASS && resultCode == RESULT_OK){
+            byte pos = data.getByteExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_POS, (byte)0xFF);
+            Log.d(TAG, TYPE_CLASS.castToString(pos));
+            if(pos<0) throw new IllegalStateException();
+            MyClass mClass = new MyClass(pos,
+                                         data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_NAME));
+            mClass.setClassPlace(data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_PLACE));
+            boolean flag = data.getBooleanExtra(EditClassActivity.EXTRA_REPLY+ EditClassActivity.DATA_FLAG, false);
+            mClass.setOnlineFlag(flag);
+            if(flag) mClass.setOnlineUrl(data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_URL));
+            // TODO: repositoryからinsert
+            homeViewModel.insert(mClass);
+            toolbar.setTitle("Home");
+            viewPager.setCurrentItem(FragNum.Home, false);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // TODO: serviceがactiveかどうか
+    public void setViewModel(HomeViewModel vm){
+        homeViewModel = vm;
+    }
+    public void setViewModel(DashboardViewModel vm){
+        dashboardViewModel = vm;
+    }
+    public void setViewModel(NotificationsViewModel vm){
+        notificationsViewModel = vm;
+    }
+
+    // serviceがactiveかどうか
     // https://stackoverflow.com/questions/600207/how-to-check-if-a-service-is-running-on-android
     public boolean activatedServiceof(Class<?> serviceClass){
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -266,7 +303,7 @@ public class MainActivity extends AppCompatActivity{
 
 //        @Override
 //        public Fragment createFragment(int position){
-//            // TODO
+//            //
 //            return new ViewPageFragment();
 //        }
 

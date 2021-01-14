@@ -4,23 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <com.mine.class_schedule.ClassRowView
+    <com.mine.class_schedule.ui.classview.ClassRowView
         android:id="@+id/period_1"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
-    <com.mine.class_schedule.ClassRowView
+    <com.mine.class_schedule.ui.classview.ClassRowView
         android:id="@+id/period_2"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
-    <com.mine.class_schedule.ClassRowView
+    <com.mine.class_schedule.ui.classview.ClassRowView
         android:id="@+id/period_3"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
-    <com.mine.class_schedule.ClassRowView
+    <com.mine.class_schedule.ui.classview.ClassRowView
         android:id="@+id/period_4"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
-    <com.mine.class_schedule.ClassRowView
+    <com.mine.class_schedule.ui.classview.ClassRowView
         android:id="@+id/period_5"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>

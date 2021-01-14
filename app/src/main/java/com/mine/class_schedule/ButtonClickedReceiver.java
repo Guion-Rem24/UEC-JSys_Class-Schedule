@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.mine.class_schedule.View.MainActivity;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ButtonClickedReceiver extends BroadcastReceiver {
@@ -12,7 +14,7 @@ public class ButtonClickedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
+        // This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
 //        throw new UnsupportedOperationException("Not yet implemented");
         Intent toDialog = new Intent(context, MainActivity.class);

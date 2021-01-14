@@ -1,15 +1,14 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.ui.classview;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import java.util.Arrays;
+import com.mine.class_schedule.R;
 
 public class ClassTableView extends TableLayout {
     private final int MON=0;

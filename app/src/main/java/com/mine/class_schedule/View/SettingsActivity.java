@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.View;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,6 +12,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 
+import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity implements  PreferenceFragmentCompat.OnPreferenceStartScreenCallback {

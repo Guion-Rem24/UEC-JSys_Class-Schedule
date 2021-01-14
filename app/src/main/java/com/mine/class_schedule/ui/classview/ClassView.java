@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.ui.classview;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
-import java.nio.ByteBuffer;
+import com.mine.class_schedule.View.EditClassActivity;
+import com.mine.class_schedule.View.MainActivity;
+import com.mine.class_schedule.ui.home.HomeFragment;
 
-//import com.mine.class_schedule.TYPE_CLASS;
+//import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 public class ClassView extends androidx.appcompat.widget.AppCompatTextView implements View.OnClickListener{
     private final String TAG = "ClassView-"+this.getText().toString();
@@ -35,17 +39,18 @@ public class ClassView extends androidx.appcompat.widget.AppCompatTextView imple
     private void init(Context context){
         setOnClickListener(this);
         posId = 0x00;
+        setText("@{String.valueOf(homeViewModel.)");
 //        Log.d(TAG, "id:"+getId());
     }
 
     @Override
     public void onClick(View v) {
 //        Toast.makeText(getA, TAG+" [onClick]");
-        Log.d(TAG, "[onCLick] : "+mPeriod+":"+mDay+",pos:("+convertPos(posId)[0]+","+convertPos(posId)[1]+")");
-        Toast.makeText(mContext, "id:"+getId(),Toast.LENGTH_LONG).show();
         Intent intent = new Intent(mContext, EditClassActivity.class);
         intent.putExtra("ClassName", getText().toString());
-        mContext.startActivity(intent);
+        intent.putExtra("ClassPos", posId);
+        Log.d(TAG, "posId: "+TYPE_CLASS.castToString(posId));
+        ((FragmentActivity) mContext).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_CLASS);
     }
 
     public void setDayId(int day){

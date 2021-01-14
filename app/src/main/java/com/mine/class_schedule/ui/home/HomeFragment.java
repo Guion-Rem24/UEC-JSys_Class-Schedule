@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.mine.class_schedule.ClassTableView;
-import com.mine.class_schedule.ClassView;
+import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.View.MainActivity;
+import com.mine.class_schedule.ui.classview.ClassTableView;
+import com.mine.class_schedule.ui.classview.ClassView;
 import com.mine.class_schedule.R;
+import com.mine.class_schedule.ui.classview.TYPE_CLASS;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "HOMEFRAGMENT";
@@ -34,17 +38,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Home");
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
         root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
         classTableView = root.findViewById(R.id.table_classView);
 
         classTableView.post(new Runnable() {
@@ -54,12 +49,35 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
+        ((MainActivity) getActivity()).setViewModel(homeViewModel);
+        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
+            }
+        });
+
+        homeViewModel.getAllClasses().observe(getViewLifecycleOwner(), new Observer<List<MyClass>>() {
+            @Override
+            public void onChanged(List<MyClass> classes) {
+                for (MyClass c : classes){
+                    Log.d(TAG, "posId: "+TYPE_CLASS.castToString(c.getClassPos()));
+                    Log.d(TAG, "MyClass: "+c);
+                    int[] pos = TYPE_CLASS.getClassPos(c.getClassPos());  // day, period
+//                    classTableView.setClass(pos, c);
+                }
+            }
+        });
+
+
         Button sampleButton = root.findViewById(R.id.sample_button);
         sampleButton.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 ClassView view = classTableView.getClass(0,0);
-                view.setBackgroundColor(getResources().getColor(R.color.black,null));
+                byte Id = view.getPosId();
             }
 
         });

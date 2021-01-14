@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +19,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mine.class_schedule.AlertService;
 import com.mine.class_schedule.LayerService;
-import com.mine.class_schedule.MainActivity;
+import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.R;
-
-import java.util.Objects;
 
 public class DashboardFragment extends Fragment {
 

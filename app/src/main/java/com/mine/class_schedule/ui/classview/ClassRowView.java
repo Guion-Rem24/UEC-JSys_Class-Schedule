@@ -1,9 +1,11 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.ui.classview;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.TableRow;
+
+import com.mine.class_schedule.R;
 
 public class ClassRowView extends TableRow {
     public ClassRowView(Context context) {
