@@ -2,24 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:baselineAligned="true">
     <include
         android:id="@+id/day_0"
-        layout="@layout/class_layout"/>
+        layout="@layout/class_layout"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"/>
     <include
         android:id="@+id/day_1"
-        layout="@layout/class_layout"/>
+        layout="@layout/class_layout"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"/>
     <include
         android:id="@+id/day_2"
-        layout="@layout/class_layout"/>
+        layout="@layout/class_layout"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"/>
     <include
         android:id="@+id/day_3"
-        layout="@layout/class_layout"/>
+        layout="@layout/class_layout"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"/>
     <include
         android:id="@+id/day_4"
-        layout="@layout/class_layout"/>
+        layout="@layout/class_layout"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"/>
     <include
         android:id="@+id/day_5"
-        layout="@layout/class_layout" />
+        layout="@layout/class_layout"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp" />
 
 </LinearLayout>

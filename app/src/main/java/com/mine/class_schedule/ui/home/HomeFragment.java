@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
     private final String TAG = "HOMEFRAGMENT";
     private HomeViewModel homeViewModel;
     private ClassTableView classTableView;
+//    private HomeFragmentBinding binding;
     private View root;
 
     @Override
@@ -62,12 +63,8 @@ public class HomeFragment extends Fragment {
         homeViewModel.getAllClasses().observe(getViewLifecycleOwner(), new Observer<List<MyClass>>() {
             @Override
             public void onChanged(List<MyClass> classes) {
-                for (MyClass c : classes){
-                    Log.d(TAG, "posId: "+TYPE_CLASS.castToString(c.getClassPos()));
-                    Log.d(TAG, "MyClass: "+c);
-                    int[] pos = TYPE_CLASS.getClassPos(c.getClassPos());  // day, period
-//                    classTableView.setClass(pos, c);
-                }
+                // UI update
+                classTableView.updateClassesUI(classes);
             }
         });
 
