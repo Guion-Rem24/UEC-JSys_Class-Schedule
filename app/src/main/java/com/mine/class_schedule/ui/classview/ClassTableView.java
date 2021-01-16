@@ -87,6 +87,10 @@ public class ClassTableView extends TableLayout {
             String name = c.getClassName();
             if(TextUtils.isEmpty(name)) name = "class "+pos[0]+" on "+pos[1];
             classes[pos[0]][pos[1]].setName(name);
+            String place = c.getClassPlace();
+            if(TextUtils.isEmpty(place)) place = "place";
+            if(c.getOnlineFlag()) place = "Online";
+            classes[pos[0]][pos[1]].setPlace(place, getResources().getColor(R.color.material_on_primary_disabled, null));
         }
     }
 

@@ -6,6 +6,11 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    
+    <string-array name="timetype">
+        <item>時間前</item>
+        <item>分前</item>
+    </string-array>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

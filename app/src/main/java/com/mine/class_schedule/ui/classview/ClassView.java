@@ -96,11 +96,16 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     public void setNameView(TextView nameview){ nameView = nameview; }
     public void setPlaceView(TextView placeview){ placeView = placeview; }
 
-    public void setName(String name){
-        if(nameView == null) Log.d(TAG, "null pointer");
+    public void setName(String name){ nameView.setText(name); }
+    public void setName(String name, int color){
         nameView.setText(name);
+        nameView.setTextColor(color);
     }
     public void setPlace(String place){ placeView.setText(place); }
+    public void setPlace(String place, int color){
+        placeView.setText(place);
+        placeView.setTextColor(color);
+    }
 
     public String getName(){ return nameView.getText().toString(); }
     public String getPlace(){ return placeView.getText().toString(); }

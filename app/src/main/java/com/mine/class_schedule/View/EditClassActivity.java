@@ -9,11 +9,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,6 +43,13 @@ public class EditClassActivity extends AppCompatActivity {
     private CheckBox ifOnlineBox;
     private Animation inAnimation;
     private Animation outAnimation;
+    private ImageButton addAlertButton;
+    private ConstraintLayout[] alertLayout;
+    private ImageButton[] deleteAlertButton;
+    private Spinner[] timeTypeSpinner;
+    private NumberPicker[] numPicker;
+    private boolean[] activeAlertPicker;
+    private int alertNum=0;
     private FloatingActionButton compEditFab;
     private final int ID_ONLINE_EDIT_TEXT = 1212;
 
@@ -57,15 +71,41 @@ public class EditClassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_class);
 
-        root = findViewById(R.id.activity_edit_class);
-        editClassName = findViewById(R.id.editext_classname);
-        editClassPlace = findViewById(R.id.edittext_place);
-        editOnlineUrl = findViewById(R.id.edittext_online_url);
-        layoutEditPlace = findViewById(R.id.edittext_place_layout);
-        layoutEditOnlineUrl = findViewById(R.id.edittext_online_url_layout);
-        compEditFab = findViewById(R.id.fab_finish_editing);
-        inAnimation = (Animation) AnimationUtils.loadAnimation(this, R.anim.in_animation);
-        outAnimation = (Animation) AnimationUtils.loadAnimation(this, R.anim.out_animation);
+        findViews();
+
+        for(int i=0;i<3;i++){
+            int finalI = i;
+            deleteAlertButton[i] = alertLayout[i].findViewById(R.id.button_delete);
+            timeTypeSpinner[i] = alertLayout[i].findViewById(R.id.spinner_type_time);
+            numPicker[i] = alertLayout[i].findViewById(R.id.numpick_time);
+            activeAlertPicker[i] = false;
+
+            deleteAlertButton[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(alertNum==3) addAlertButton.setClickable(true);
+                    alertNum--;
+//                    alertLayout[finalI].startAnimation(outAnimation);
+                    alertLayout[finalI].setVisibility(View.GONE);
+                    activeAlertPicker[finalI] = false;
+                }
+            });
+
+            timeTypeSpinner[i].setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Spinner spinner = (Spinner) parent;
+//                    Log.d(TAG, spinner+", "+view+", "+position+", "+id);
+//                    Toast.makeText(getApplicationContext(), spinner+", "+view+", "+position+", "+id, Toast.LENGTH_LONG).show();
+                    setNumberPickerRange(finalI, position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+        }
 
 
         Intent intent = getIntent();
@@ -88,7 +128,7 @@ public class EditClassActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     editClassPlace.setEnabled(false);
-                    layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.teal_700,null));
+                    layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.material_on_primary_disabled,null));
                     layoutEditOnlineUrl.startAnimation(inAnimation);
                     layoutEditOnlineUrl.setVisibility(View.VISIBLE);
                     isOnline = true;
@@ -113,6 +153,21 @@ public class EditClassActivity extends AppCompatActivity {
             }
         });
 
+        addAlertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "alertNum: "+ alertNum);
+//                alertLayout[alertNum].startAnimation(inAnimation);
+                alertLayout[smallInactiveAlert()].setVisibility(View.VISIBLE);
+                activeAlertPicker[smallInactiveAlert()] = true;
+                if(++alertNum==3) addAlertButton.setClickable(false);
+            }
+        });
+
+
+        /**
+         * 編集完了ボタン押下時
+         */
         compEditFab.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -186,7 +241,53 @@ public class EditClassActivity extends AppCompatActivity {
 
     // TODO: onBackPressed()でisDataChanged()で確認popup
 
+    private void findViews(){
+        root = findViewById(R.id.activity_edit_class);
+        editClassName = findViewById(R.id.editext_classname);
+        editClassPlace = findViewById(R.id.edittext_place);
+        editOnlineUrl = findViewById(R.id.edittext_online_url);
+        layoutEditPlace = findViewById(R.id.edittext_place_layout);
+        layoutEditOnlineUrl = findViewById(R.id.edittext_online_url_layout);
+        compEditFab = findViewById(R.id.fab_finish_editing);
+        addAlertButton = findViewById(R.id.button_add_alert);
+        alertLayout = new ConstraintLayout[3];
+        deleteAlertButton = new ImageButton[3];
+        numPicker = new NumberPicker[3];
+        timeTypeSpinner = new Spinner[3];
+        activeAlertPicker = new boolean[3];
+        alertLayout[0] = findViewById(R.id.edit_alert1);
+        alertLayout[1] = findViewById(R.id.edit_alert2);
+        alertLayout[2] = findViewById(R.id.edit_alert3);
+        inAnimation = (Animation) AnimationUtils.loadAnimation(this, R.anim.in_animation);
+        outAnimation = (Animation) AnimationUtils.loadAnimation(this, R.anim.out_animation);
+    }
     private boolean isDataChanged(){
         return (classNameChangedFlag && classPlaceChangedFlag && classOnlineUrlChangedFlag);
+    }
+
+    private int smallInactiveAlert(){
+        if(alertNum==3) return -1;
+        int result=0;
+        for(int i=0;i<3;i++){
+            if(activeAlertPicker[i]) continue;
+            result = i;
+        }
+        return result;
+    }
+
+    private void setNumberPickerRange(int alertNumber, int posSpinner){
+        int max;
+        switch(posSpinner){
+            case 0: // 時間前
+                max = 24;
+                break;
+            case 1: // 分前
+                max = 59;
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+        numPicker[alertNumber].setMaxValue(max);
+        numPicker[alertNumber].setMinValue(0);
     }
 }

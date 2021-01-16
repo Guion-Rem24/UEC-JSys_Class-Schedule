@@ -8,8 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".View.EditClassActivity">
 
-
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edittext_online_url_layout"
         android:layout_width="match_parent"
@@ -25,6 +23,34 @@
             android:textSize="15sp"
             android:hint="オンライン講義のURL..." />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <include
+        layout="@layout/alert_layout"
+        android:id="@+id/edit_alert3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/edit_alert2"
+        app:layout_constraintTop_toBottomOf="@+id/edit_alert2"
+        android:visibility="gone"
+        />
+    <include
+        layout="@layout/alert_layout"
+        android:id="@+id/edit_alert2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/edit_alert1"
+        app:layout_constraintTop_toBottomOf="@+id/edit_alert1"
+        android:visibility="gone"
+        />
+    <include
+        layout="@layout/alert_layout"
+        android:id="@+id/edit_alert1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/text_alert"
+        app:layout_constraintTop_toBottomOf="@+id/text_alert"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/text_classname"
@@ -91,6 +117,48 @@
             android:hint="講義場所..." />
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <TextView
+        android:id="@+id/text_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginStart="10sp"
+        android:layout_marginEnd="0sp"
+        android:text="通知"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edittext_online_url_layout" />
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/edittext_alert_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/text_alert"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:background="@color/white">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/edittext_alert"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50sp"-->
+<!--            android:textSize="15sp"-->
+<!--            android:hint="講義場所..." />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+    <ImageButton
+        android:id="@+id/button_add_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/edit_alert3"
+        app:layout_constraintTop_toBottomOf="@+id/edit_alert3"
+        android:src="@drawable/ic_baseline_add_24"
+        android:backgroundTint="@android:color/transparent"
+        android:background="@color/white"
+        />
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_finish_editing"
         android:layout_width="wrap_content"
@@ -99,15 +167,14 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/ripple_background"
         app:srcCompat="@android:drawable/ic_menu_edit"
         android:clickable="true"
         android:focusable="true" />
-
-
     <!--    <Button-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/edittext_online_url_layout"-->
-<!--        app:layout_constraintStart_toStartOf="parent"/>-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/edittext_online_url_layout"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
