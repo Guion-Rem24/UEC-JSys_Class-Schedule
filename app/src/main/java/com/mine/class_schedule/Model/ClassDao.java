@@ -21,6 +21,9 @@ public interface ClassDao {
 
     @Query("SELECT * FROM class_table ORDER BY classPos ASC")
     LiveData<List<MyClass>> getAllClasses();
+
+    @Query("SELECT * FROM class_table WHERE classPos = :posId")
+    MyClass getMyClass(int posId);
     
 //    @Query("SELECT classPos FROM class_table")
 //    MyClass getMyClass(int pos);

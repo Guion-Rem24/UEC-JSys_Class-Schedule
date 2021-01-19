@@ -1,6 +1,7 @@
 package com.mine.class_schedule.ui.home;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -13,6 +14,8 @@ import java.util.List;
 
 public class HomeViewModel extends AndroidViewModel {
 
+    private final String TAG = "HomeViewModel";
+
     private ClassRepository mRepository;
     private LiveData<List<MyClass>> mAllClasses;
 
@@ -20,8 +23,12 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(Application application) {
         super(application);
+        Log.d(TAG, "[Constructor]");
         mRepository = new ClassRepository(application);
         mAllClasses = mRepository.getAllClasses();
+        if(mAllClasses.equals(null)){
+            Log.d(TAG, "mAllClasses is null");
+        }
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }
@@ -32,4 +39,6 @@ public class HomeViewModel extends AndroidViewModel {
     public LiveData<String> getText() {
         return mText;
     }
+//    public MyClass getMyClass(int posId){ return mRepository.getMyClass(posId); }
+
 }

@@ -61,13 +61,12 @@ public class ClassTableView extends TableLayout {
                     classes[p][day] = (ClassView) tableRow[p].findViewById(dayId);
                     classes[p][day].setNameView(classes[p][day].findViewById(R.id.text_classname));
                     classes[p][day].setPlaceView(classes[p][day].findViewById(R.id.text_classplace));
-                    Log.d(TAG, p+","+day+"="+dayId);
+//                    Log.d(TAG, p+","+day+"="+dayId);
                 }
                 String class_text = "class "+p+" on "+day;
                 classes[p][day].setName(class_text);
-                classes[p][day].setPeriodId(p);
-                classes[p][day].setDayId(day);
-                Log.d(TAG, "id:"+classes[p][day].getPosId());
+                classes[p][day].setClassData(day,p);
+//                Log.d(TAG, "id:"+classes[p][day].getPosId());
             }
         }
 
@@ -86,11 +85,19 @@ public class ClassTableView extends TableLayout {
             int[] pos = TYPE_CLASS.getClassPos(c.getClassPos()); // day, period
             String name = c.getClassName();
             if(TextUtils.isEmpty(name)) name = "class "+pos[0]+" on "+pos[1];
-            classes[pos[0]][pos[1]].setName(name);
+            classes[pos[1]][pos[0]].setName(name);
             String place = c.getClassPlace();
             if(TextUtils.isEmpty(place)) place = "place";
             if(c.getOnlineFlag()) place = "Online";
-            classes[pos[0]][pos[1]].setPlace(place, getResources().getColor(R.color.material_on_primary_disabled, null));
+            classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.material_on_primary_disabled, null));
+        }
+    }
+
+    public void setClassData(){
+        for(ClassView[] c_ : classes){
+            for(ClassView c : c_){
+                c.setClass();
+            }
         }
     }
 

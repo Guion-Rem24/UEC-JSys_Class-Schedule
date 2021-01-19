@@ -2,21 +2,22 @@ package com.mine.class_schedule.ui.classview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.mine.class_schedule.R;
+import com.mine.class_schedule.Model.MyClass;
 import com.mine.class_schedule.View.EditClassActivity;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.ui.home.HomeFragment;
+import com.mine.class_schedule.ui.home.HomeViewModel;
 
 //import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
@@ -28,6 +29,7 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     private Context mContext;
     private TextView nameView;
     private TextView placeView;
+    private MyClass classData;
 
     public ClassView(Context context) {
         super(context);
@@ -56,9 +58,12 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     public void onClick(View v) {
 //        Toast.makeText(getA, TAG+" [onClick]");
         Intent intent = new Intent(mContext, EditClassActivity.class);
-        intent.putExtra("ClassName", nameView.getText().toString());
-        intent.putExtra("ClassPos", posId);
-        Log.d(TAG, "posId: "+TYPE_CLASS.castToString(posId));
+//        intent.putExtra("ClassName", nameView.getText().toString());
+//        intent.putExtra("ClassPos", posId);
+        intent.putExtra("ClassPos", (byte)posId);
+        intent.putExtra("ClassData", classData);
+
+        Log.d(TAG, "posId: "+TYPE_CLASS.castToString(posId)+", classData:"+classData);
         ((FragmentActivity) mContext).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_CLASS);
     }
 
@@ -81,6 +86,23 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
         posId = (byte)((byte)(posId & TYPE_CLASS.PERIOD_CLEAR_MASK) | period);
     }
     public void setPosId(byte pos_){ posId = pos_; }
+
+    public void setClassData(int day, int period){
+        setDayId(day);
+        setPeriodId(period);
+        if(((MainActivity) mContext).getHomeViewModel() == null) Log.d(TAG, "HomeViewModel is null");
+        Log.v(TAG,"posId: "+posId);
+//        new getMyClassAsyncTask( ((MainActivity) mContext).getHomeViewModel() ).execute();
+//        classData = (((MainActivity) mContext)).getHomeFragment().getMyClass(posId);
+
+    }
+
+    public void setClass(){
+        if((((MainActivity) mContext)).getHomeFragment().getMyClass(posId) == null){
+            Log.d(TAG, posId+": homeFragment().getMyClass() is null");
+        }
+        classData = (((MainActivity) mContext)).getHomeFragment().getMyClass(posId);
+    }
 
     public int getDayId(){ return mDay; }
     public int getPeriodId(){ return mPeriod; }
@@ -109,6 +131,20 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
 
     public String getName(){ return nameView.getText().toString(); }
     public String getPlace(){ return placeView.getText().toString(); }
+
+
+
+//    private static class getMyClassAsyncTask extends AsyncTask<Void, Void, Void>{
+//        private HomeViewModel viewModel;
+//
+//        public getMyClassAsyncTask(HomeViewModel vm){ this.viewModel = vm; }
+//
+//        @Override
+//        protected Void doInBackground(final Void... params) {
+//            classData = viewModel.getMyClass(posId);
+//            return null;
+//        }
+//    }
 
 
 }

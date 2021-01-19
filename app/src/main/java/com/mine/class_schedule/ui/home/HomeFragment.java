@@ -29,6 +29,7 @@ public class HomeFragment extends Fragment {
     private ClassTableView classTableView;
 //    private HomeFragmentBinding binding;
     private View root;
+    private List<MyClass> classList;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -39,6 +40,31 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Home");
+
+        homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
+        ((MainActivity) getActivity()).setViewModel(homeViewModel);
+//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
+
+        homeViewModel.getAllClasses().observe(getViewLifecycleOwner(), new Observer<List<MyClass>>() {
+            @Override
+            public void onChanged(List<MyClass> classes) {
+                Log.d(TAG, "[Observe] List<MyClass> is Changed");
+                if(classes == null){
+                    Log.d(TAG,"classes is null");
+                }
+                classList = classes;
+                classTableView.setClassData();
+                // UI update
+                classTableView.updateClassesUI(classes);
+            }
+        });
+
         root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         classTableView = root.findViewById(R.id.table_classView);
@@ -50,23 +76,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-        ((MainActivity) getActivity()).setViewModel(homeViewModel);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
-        homeViewModel.getAllClasses().observe(getViewLifecycleOwner(), new Observer<List<MyClass>>() {
-            @Override
-            public void onChanged(List<MyClass> classes) {
-                // UI update
-                classTableView.updateClassesUI(classes);
-            }
-        });
 
 
         Button sampleButton = root.findViewById(R.id.sample_button);
@@ -81,5 +90,19 @@ public class HomeFragment extends Fragment {
 
         Log.v(TAG, "====on CreateView ====");
         return root;
+    }
+
+
+    public MyClass getMyClass(byte posId){
+        MyClass result = null;
+        for(MyClass c : classList){
+//            Log.v(TAG, "posId: "+posId+", c.getClassPos: "+c.getClassPos());
+            if((int)c.getClassPos() == (int)posId){
+//                Log.v(TAG, "getMyClass() of "+posId+" exists");
+                result = c;
+                break;
+            }
+        }
+        return result;
     }
 }

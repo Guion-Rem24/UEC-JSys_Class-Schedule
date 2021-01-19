@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity{
     private HomeViewModel homeViewModel;
     private DashboardViewModel dashboardViewModel;
     private NotificationsViewModel notificationsViewModel;
+    static private HomeFragment homeFragment;
+    static private DashboardFragment dashboardFragment;
+    static private NotificationsFragment notificationsFragment;
 
     private static final String TAG = "MainActivity";
     private ViewPager2 viewPager;
@@ -147,11 +150,14 @@ public class MainActivity extends AppCompatActivity{
         public Fragment createFragment(int position) {
             switch(position){
                 case FragNum.Home:
-                    return new HomeFragment();
+                    homeFragment = new HomeFragment();
+                    return homeFragment;
                 case FragNum.DashBoard:
-                    return new DashboardFragment();
+                    dashboardFragment = new DashboardFragment();
+                    return dashboardFragment;
                 case FragNum.Notification:
-                    return new NotificationsFragment();
+                    notificationsFragment =  new NotificationsFragment();
+                    return notificationsFragment;
             }
             // position given as an argument do not match any FragNums,
             // returns HomeFragment
@@ -193,17 +199,35 @@ public class MainActivity extends AppCompatActivity{
         }
 
         if (requestCode == REQUEST_CODE_EDIT_CLASS && resultCode == RESULT_OK){
-            byte pos = data.getByteExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_POS, (byte)0xFF);
-            Log.d(TAG, TYPE_CLASS.castToString(pos));
-            if(pos<0) throw new IllegalStateException();
-            MyClass mClass = new MyClass(pos,
-                                         data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_NAME));
-            mClass.setClassPlace(data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_PLACE));
-            boolean flag = data.getBooleanExtra(EditClassActivity.EXTRA_REPLY+ EditClassActivity.DATA_FLAG, false);
-            mClass.setOnlineFlag(flag);
-            if(flag) mClass.setOnlineUrl(data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_URL));
+            MyClass classData = (MyClass) data.getSerializableExtra("ClassData");
+//            byte pos = data.getByteExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_POS, (byte)0xFF);
+//            Log.d(TAG, TYPE_CLASS.castToString(pos));
+//            if(pos<0) throw new IllegalStateException();
+//            MyClass mClass = new MyClass(pos,
+//                                         data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_NAME));
+//            mClass.setClassPlace(data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_PLACE));
+//            boolean flag = data.getBooleanExtra(EditClassActivity.EXTRA_REPLY+ EditClassActivity.DATA_FLAG, false);
+//            mClass.setOnlineFlag(flag);
+//            if(flag) mClass.setOnlineUrl(data.getStringExtra(EditClassActivity.EXTRA_REPLY+EditClassActivity.DATA_URL));
+
+            int preAlertNum = classData.getAlertNum();
+            long[] preAlertTime = new long[3];
+            if (preAlertNum >= 0) System.arraycopy(classData.getAlerts(), 0, preAlertTime, 0, preAlertNum);
+//      ->
+//      for(int i=0;i<preAlertNum;i++){
+//            preAlertTime[i] = preAlertTime[i];
+//      }
+
+            Log.d(TAG, "[get DATA] " +
+                    "\nclassPos:   " + classData.getClassPos() +
+                    "\nclassName:  " + classData.getClassName() +
+                    "\nclassPlace: " + classData.getClassPlace() +
+                    "\nOnline URL: " + classData.getOnlineUrl() +
+                    "\nisOnline:   " + classData.getOnlineFlag() +
+                    "\npreAlertNum:" + classData.getAlertNum() +
+                    "\npreAlerts = {"+preAlertTime[0]+", "+preAlertTime[1]+", "+preAlertTime[2]+"}");
             // TODO: repositoryからinsert
-            homeViewModel.insert(mClass);
+            homeViewModel.insert(classData);
             toolbar.setTitle("Home");
             viewPager.setCurrentItem(FragNum.Home, false);
         }
@@ -219,6 +243,12 @@ public class MainActivity extends AppCompatActivity{
     public void setViewModel(NotificationsViewModel vm){
         notificationsViewModel = vm;
     }
+
+    public HomeViewModel getHomeViewModel() { return this.homeViewModel; }
+
+    public HomeFragment getHomeFragment()                   { return homeFragment; }
+    public DashboardFragment getDashboardFragment()         { return dashboardFragment; }
+    public NotificationsFragment getNotificationsFragment() { return notificationsFragment; }
 
     // serviceがactiveかどうか
     // https://stackoverflow.com/questions/600207/how-to-check-if-a-service-is-running-on-android

@@ -2,24 +2,34 @@ package com.mine.class_schedule.Model;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.Set;
 
 public class ClassRepository {
+    private final String TAG = "ClassRepository";
+
     private ClassDao mClassDao;
     private LiveData<List<MyClass>> mAllClasses;
 
     public ClassRepository(Application app){
+        Log.d(TAG, "[Constructor]");
+
         ClassRoomDatabase db = ClassRoomDatabase.getDatabase(app);
         mClassDao = db.classDao();
         mAllClasses = mClassDao.getAllClasses();
+        if(mAllClasses.equals(null)){
+            Log.d(TAG, "mAllClasses is null");
+        }
     }
 
     public LiveData<List<MyClass>> getAllClasses(){ return this.mAllClasses; }
     public void insert(MyClass mClass) { new insertAsyncTask(mClassDao).execute(mClass); }
 //    public MyClass getMyClass(byte pos) {  new getAsyncTask(mClassDao).execute((int)pos); }
+//    public MyClass getMyClass(int posId) { return mClassDao.getMyClass(posId); }
 
     private static class insertAsyncTask extends AsyncTask<MyClass, Void, Void>{
         private ClassDao mAsyncTaskDao;
@@ -32,6 +42,7 @@ public class ClassRepository {
             return null;
         }
     }
+
 
 //    private static class getAsyncTask extends AsyncTask<Integer, Void, MyClass>{
 //        private ClassDao mAsyncTaskDao;
