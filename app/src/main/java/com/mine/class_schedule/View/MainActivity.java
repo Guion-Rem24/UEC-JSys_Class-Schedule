@@ -102,14 +102,14 @@ public class MainActivity extends AppCompatActivity{
 
 // ViewPager2 と navController は共存しない
 /*
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.viewPager);
-//        navController = navHostFragment.getNavController();
-//        navController = Navigation.findNavController(this, R.id.viewPager);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.viewPager);
+        navController = navHostFragment.getNavController();
+        navController = Navigation.findNavController(this, R.id.viewPager);
 
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController(navView, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
  */
 
 

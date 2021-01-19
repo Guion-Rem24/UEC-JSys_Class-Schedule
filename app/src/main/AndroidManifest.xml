@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mine.class_schedule">
     <!-- 電源オン検知 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- For Overlay -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- For Overlay after API 28 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- For Overlay -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="INTERNAL_SYSTEM_WINDOW" />
+    <!-- For Overlay over API 28 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -13,15 +16,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoActionBar">
-        <activity android:name=".View.EditClassActivity"></activity>
+        <activity android:name=".View.EditClassActivity" />
 
         <receiver
             android:name=".ButtonClickedReceiver"
             android:enabled="true"
             android:exported="true" />
 
+        <receiver android:name=".ScreenOffReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <service
             android:name=".LayerService"
+            android:enabled="true"
+            android:exported="true" />
+        <service android:name=".OverlayService"
             android:enabled="true"
             android:exported="true" />
         <service

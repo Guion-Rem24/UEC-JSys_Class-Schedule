@@ -168,16 +168,16 @@ public class LayerService extends Service {
         wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
         // sample Cancel Button //////////////////////////
-        Button cancelButton = view.findViewById(R.id.sample_cancel_button);
-        if(cancelButton != null) {
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Clicked...", Toast.LENGTH_LONG).show();
-                    onDestroy();
-                }
-            });
-        }
+//        Button cancelButton = view.findViewById(R.id.sample_cancel_button);
+//        if(cancelButton != null) {
+//            cancelButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(getApplicationContext(), "Clicked...", Toast.LENGTH_LONG).show();
+//                    onDestroy();
+//                }
+//            });
+//        }
 
         wm.addView(view, params);
 

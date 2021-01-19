@@ -36,6 +36,7 @@ import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 import com.mine.class_schedule.ui.home.HomeFragment;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -442,7 +443,6 @@ public class EditClassActivity extends AppCompatActivity {
             }
             setNumberPickerRange(i,spinnerPos);
             timeTypeSpinner[i].setSelection(spinnerPos);
-            // TODO: 0で初期化される
             numPicker[i].setValue(time);
             ignoredValue[i] = true;
         }
@@ -487,10 +487,10 @@ public class EditClassActivity extends AppCompatActivity {
             }
             ctr++;
         }
-        for(int i=ctr+1;i<3;i++){
+        for(int i=ctr;i<3;i++){
             alerts[i] = 0;
         }
-        // TODO:分単位に変換後，sort
+        Arrays.sort(alerts);
         return alerts;
     }
 

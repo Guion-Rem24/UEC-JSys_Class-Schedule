@@ -24,7 +24,7 @@ import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    private final String TAG = "HOMEFRAGMENT";
+    private final String TAG = "HomeFragment";
     private HomeViewModel homeViewModel;
     private ClassTableView classTableView;
 //    private HomeFragmentBinding binding;

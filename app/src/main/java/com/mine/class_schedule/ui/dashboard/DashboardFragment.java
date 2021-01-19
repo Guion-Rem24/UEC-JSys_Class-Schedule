@@ -1,5 +1,8 @@
 package com.mine.class_schedule.ui.dashboard;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +22,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mine.class_schedule.AlertService;
 import com.mine.class_schedule.LayerService;
+import com.mine.class_schedule.OverlayService;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.R;
 
@@ -76,15 +80,20 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
 
                 Log.v(TAG, "---- Clicked ----");
-                if(!activatedlayerService) {
-                    activatedlayerService = true;
-                    Intent intent = new Intent(getActivity(), LayerService.class);
-//                    intent.setAction("user.clicked.overlay.button");
-                    //                Intent intent = new Intent( "user.clicked.overlay.button");
-                    LocalBroadcastManager bcManager = LocalBroadcastManager.getInstance(requireActivity()); // .getInstance(getActivity());
-                    bcManager.sendBroadcast(intent);
-                    requireActivity().startService(intent); // getActivity().startService(intent)
-                }
+                Intent intent = new Intent(getActivity().getApplication(), OverlayService.class);
+                LocalBroadcastManager lbManager = LocalBroadcastManager.getInstance(getActivity().getApplication());
+                lbManager.sendBroadcast(intent);
+                getActivity().startService(intent);
+//                if(!activatedlayerService) {
+//                    activatedlayerService = true;
+//                    Intent intent = new Intent(getActivity(), OverlayService.class);
+//                    PendingIntent pendingIntent = PendingIntent.getService( getContext(),
+//                                                                            0,//MainActivity.REQUEST_SYSTEM_OVERLAY,
+//                                                                            intent,
+//                                                                            PendingIntent.FLAG_ONE_SHOT );
+//                    AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+//                    manager.set(AlarmManager.ELAPSED_REALTIME, 3000, pendingIntent);
+//                }
             }
         });
         return root;
