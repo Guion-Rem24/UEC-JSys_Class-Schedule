@@ -28,6 +28,7 @@
             android:exported="true" />
 
         <receiver android:name=".AlarmBroadcastReceiver"
+            android:process=":remote"
             android:enabled="true"
             android:exported="true" />
 

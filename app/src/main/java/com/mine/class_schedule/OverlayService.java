@@ -38,7 +38,14 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
     @Override
     public int onStartCommand(Intent intent, int flag, int startId){
         Log.d(TAG, "[onStartCommand]");
-        classData = (MyClass) intent.getSerializableExtra("ClassData");
+
+        if(intent != null) {
+            Log.d(TAG,"intent: "+intent.getPackage());
+            classData = (MyClass) intent.getSerializableExtra("ClassData");
+        } else {
+            Log.d(TAG, "intent is null");
+            throw new IllegalStateException();
+        }
         if(classData != null){
             Log.d(TAG, "[extract DATA] " +
                     "\nclassPos:   " + TYPE_CLASS.getPeriodString(classData.getClassPos()) + " on " + TYPE_CLASS.getDayString(classData.getClassPos()) +

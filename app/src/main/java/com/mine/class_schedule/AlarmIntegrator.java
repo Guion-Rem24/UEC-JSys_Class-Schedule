@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.mine.class_schedule.Model.MyClass;
@@ -48,7 +49,6 @@ public class AlarmIntegrator {
             hour = (int)alarm/60;
             if(startHour - hour < 0){
                 startHour = 24 - (hour - startHour);
-                calendar.set(Calendar.DAY_OF_YEAR, -1);
             }
             min = 0;
         } else {
@@ -70,6 +70,8 @@ public class AlarmIntegrator {
             addDay = 7 - (nowDay - classDay);
         } else if( classDay > nowDay ) {// 今週に講義曜日がある場合
             addDay = classDay - nowDay;
+        } else if( calendar.getTimeInMillis() < System.currentTimeMillis() ){ // 同じ曜日だが、時間は過ぎている場合
+            addDay = 7;
         }
         calendar.add(Calendar.DAY_OF_YEAR, addDay);
 
@@ -88,7 +90,14 @@ public class AlarmIntegrator {
 //                intent,
 //                PendingIntent.FLAG_UPDATE_CURRENT);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        if(classData != null) intent.putExtra("ReceivedClassData", classData);
+        if(classData != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("ClassData", classData);
+            intent.putExtra("bundle", bundle);
+        }else{
+            Log.d(TAG,"classData is null");
+            throw new NullPointerException();
+        }
         intent.setAction(ACTION_ALARM);
         return PendingIntent
                 .getBroadcast(context,

@@ -3,6 +3,7 @@ package com.mine.class_schedule;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.mine.class_schedule.Model.MyClass;
@@ -13,7 +14,14 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "[onReceive] ACTION: "+intent.getAction() +", Context:"+context.getClass().toString());
-        MyClass classData = (MyClass) intent.getSerializableExtra("ReceivedClassData");
+//        MyClass classData = (MyClass) intent.getSerializableExtra("ReceivedClassData");
+
+        Bundle bundle = intent.getBundleExtra("bundle");
+        if(bundle == null) throw new NullPointerException();
+
+        MyClass classData = (MyClass) bundle.getSerializable("ClassData");
+        if(classData == null) throw new NullPointerException();
+
         if(classData != null){
             Log.d(TAG, "[extract DATA] " +
                     "\nclassPos:   " + TYPE_CLASS.getPeriodString(classData.getClassPos()) + " on " + TYPE_CLASS.getDayString(classData.getClassPos()) +
@@ -30,6 +38,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             Log.d(TAG, "put Extra of classData");
             intent.putExtra("ClassData", classData);
         }
+        // TODO: 先にServiceが呼ばれてputExtraできていない
         context.startService(serviceIntent);
     }
 }
