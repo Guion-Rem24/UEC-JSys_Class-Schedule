@@ -1,5 +1,6 @@
 package com.mine.class_schedule.ui.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,17 +10,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.R;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.ui.classview.ClassTableView;
 import com.mine.class_schedule.ui.classview.ClassView;
-import com.mine.class_schedule.R;
-import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 import java.util.List;
 
@@ -72,6 +71,7 @@ public class HomeFragment extends Fragment {
         classTableView.post(new Runnable() {
             @Override
             public void run() {
+                classTableView.setLayoutSize(classTableView.getWidth(), classTableView.getHeight());
                 Log.d(TAG, "(w, h = "+classTableView.getWidth()+", "+classTableView.getHeight()+")");
             }
         });

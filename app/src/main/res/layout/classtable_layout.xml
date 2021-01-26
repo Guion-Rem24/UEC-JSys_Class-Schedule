@@ -8,27 +8,27 @@
             android:id="@+id/period_1"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:layout_width="wrap_content"/>
+            android:layout_width="match_parent"/>
         <com.mine.class_schedule.ui.classview.ClassRowView
             android:id="@+id/period_2"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:layout_width="wrap_content"/>
+            android:layout_width="match_parent"/>
         <com.mine.class_schedule.ui.classview.ClassRowView
             android:id="@+id/period_3"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:layout_width="wrap_content"/>
+            android:layout_width="match_parent"/>
         <com.mine.class_schedule.ui.classview.ClassRowView
             android:id="@+id/period_4"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:layout_width="wrap_content"/>
+            android:layout_width="match_parent"/>
         <com.mine.class_schedule.ui.classview.ClassRowView
             android:id="@+id/period_5"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:layout_width="wrap_content"/>
+            android:layout_width="match_parent"/>
     </LinearLayout>
 
 

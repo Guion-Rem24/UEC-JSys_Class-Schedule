@@ -53,6 +53,63 @@ public class TYPE_CLASS {
         }
     }
 
+    public static int getDay(byte posId){
+        switch(posId & DAY_MASK){
+            case MONDAY:
+                return 0;
+            case TUESDAY:
+                return 1;
+            case WEDNESDAY:
+                return 2;
+            case THURSDAY:
+                return 3;
+            case FRIDAY:
+                return 4;
+            case SATURDAY:
+                return 5;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+    public static String getDayString(byte posId){
+        switch(posId & DAY_MASK){
+            case MONDAY:
+                return "月曜日";
+            case TUESDAY:
+                return "火曜日";
+            case WEDNESDAY:
+                return "水曜日";
+            case THURSDAY:
+                return "木曜日";
+            case FRIDAY:
+                return "金曜日";
+            case SATURDAY:
+                return "土曜日";
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    public static String getPeriodString(byte posId){
+        switch(posId & PERIOD_MASK){
+            case PERIOD_1:
+                return "1限";
+            case PERIOD_2:
+                return "2限";
+            case PERIOD_3:
+                return "3限";
+            case PERIOD_4:
+                return "4限";
+            case PERIOD_5:
+                return "5限";
+            case PERIOD_6:
+                return "6限";
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+
     static final byte DAY_CLEAR_MASK = (byte) 0xF0;
     static final byte PERIOD_CLEAR_MASK = (byte) 0x0F;
 
@@ -107,6 +164,41 @@ public class TYPE_CLASS {
                 throw new IllegalArgumentException();
         }
         return pos;
+    }
+
+    public static int getPeriodStartHour(byte posId){
+        switch(posId & PERIOD_MASK){
+            case PERIOD_1:
+                return 9;
+            case PERIOD_2:
+                return 10;
+            case PERIOD_3:
+                return 13;
+            case PERIOD_4:
+                return 14;
+            case PERIOD_5:
+                return 16;
+            case PERIOD_6:
+                return 17;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+    public static int getPeriodStartMin(byte posId){
+        switch(posId & PERIOD_MASK){
+            case PERIOD_1:
+            case PERIOD_3:
+                return 0;
+            case PERIOD_2:
+            case PERIOD_4:
+                return 40;
+            case PERIOD_5:
+                return 15;
+            case PERIOD_6:
+                return 45;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
 }

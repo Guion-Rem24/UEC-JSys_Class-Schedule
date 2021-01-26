@@ -28,4 +28,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="opt_menu_Pref">設定</string>
+    <string name="opt_menu_help">ヘルプ</string>
+    <string name="opt_menu_info">お知らせ</string>
 </resources>

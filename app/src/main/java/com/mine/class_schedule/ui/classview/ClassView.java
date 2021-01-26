@@ -2,11 +2,13 @@ package com.mine.class_schedule.ui.classview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -46,7 +48,9 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     private void init(Context context){
         setOnClickListener(this);
         Log.d(TAG, "[init], context:"+context.getClass().getName());
+
         posId = 0x00;
+
 //        nameView = this.findViewById(R.id.text_classname);
 //        placeView = this.findViewById(R.id.text_classplace);
 
@@ -133,6 +137,16 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     public String getPlace(){ return placeView.getText().toString(); }
 
 
+    public void setViewSize(int width, int height){
+        Point displaySize = new Point();
+
+        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getSize(displaySize);
+
+//        setLayoutParams(new ConstraintLayout.LayoutParams(width, height));
+        setMinWidth(width);
+        setMinHeight(height);
+    }
 
 //    private static class getMyClassAsyncTask extends AsyncTask<Void, Void, Void>{
 //        private HomeViewModel viewModel;

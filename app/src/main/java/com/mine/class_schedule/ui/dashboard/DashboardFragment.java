@@ -20,15 +20,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mine.class_schedule.AlarmIntegrator;
 import com.mine.class_schedule.AlertService;
 import com.mine.class_schedule.LayerService;
+import com.mine.class_schedule.Model.MyClass;
 import com.mine.class_schedule.OverlayService;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.R;
+import com.mine.class_schedule.ui.classview.TYPE_CLASS;
+
+import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
+    private List<MyClass> classList;
 
     private final String TAG="DashboardFragment";
     FloatingActionButton fab;
@@ -59,6 +65,12 @@ public class DashboardFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        dashboardViewModel.getAllClasses().observe(getViewLifecycleOwner(), new Observer<List<MyClass>>() {
+            @Override
+            public void onChanged(List<MyClass> myClass) {
+                classList = myClass;
+            }
+        });
 
         fab = root.findViewById(R.id.fab);
         if(fab == null) {
@@ -80,10 +92,40 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
 
                 Log.v(TAG, "---- Clicked ----");
-                Intent intent = new Intent(getActivity().getApplication(), OverlayService.class);
-                LocalBroadcastManager lbManager = LocalBroadcastManager.getInstance(getActivity().getApplication());
-                lbManager.sendBroadcast(intent);
-                getActivity().startService(intent);
+                boolean testing = true;
+                if(!testing){
+                    Intent intent = new Intent(getActivity().getApplication(), OverlayService.class);
+                    MyClass classData = null;
+                    for (MyClass c : classList) {
+                        if (c.getClassPos() == 16) { // test 月曜1限目
+                            classData = c;
+                            break;
+                        }
+                    }
+                    intent.putExtra("ClassData", classData);
+                    LocalBroadcastManager lbManager = LocalBroadcastManager.getInstance(getActivity().getApplication());
+                    lbManager.sendBroadcast(intent);
+                    getActivity().startService(intent);
+                } else {
+                    MyClass classData = null;
+                    for (MyClass c : classList) {
+                        if (c.getClassPos() == (byte) (TYPE_CLASS.getDay(1) | TYPE_CLASS.getPeriod(4))) { // test 月曜1限目
+                            classData = c;
+                            break;
+                        }
+                    }
+                    Log.d(TAG, "[extract DATA] " +
+                            "\nclassPos:   " + TYPE_CLASS.getPeriodString(classData.getClassPos()) +" on "+TYPE_CLASS.getDayString(classData.getClassPos()) +
+                            "\nclassName:  " + classData.getClassName() +
+                            "\nclassPlace: " + classData.getClassPlace() +
+                            "\nOnline URL: " + classData.getOnlineUrl() +
+                            "\nisOnline:   " + classData.getOnlineFlag() +
+                            "\npreAlertNum:" + classData.getAlertNum() +
+                            "\npreAlerts = {"+classData.getAlert1()+", "+classData.getAlert2()+", "+classData.getAlert3()+"}");
+                    AlarmIntegrator integrator = new AlarmIntegrator(getContext());
+                    integrator.addAlarm(classData.getClassPos(), classData.getAlert1(), classData);
+                }
+                // Receiverで受けてやってほうがいいかも
 //                if(!activatedlayerService) {
 //                    activatedlayerService = true;
 //                    Intent intent = new Intent(getActivity(), OverlayService.class);
@@ -92,7 +134,7 @@ public class DashboardFragment extends Fragment {
 //                                                                            intent,
 //                                                                            PendingIntent.FLAG_ONE_SHOT );
 //                    AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-//                    manager.set(AlarmManager.ELAPSED_REALTIME, 3000, pendingIntent);
+//                    manager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, pendingIntent);
 //                }
             }
         });

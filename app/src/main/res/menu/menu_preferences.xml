@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.attendance_tracking.View.MainActivity" >
+
+    <item
+        android:id="@+id/optionsMenu_Pref"
+        android:title="@string/opt_menu_Pref"
+        android:icon="@android:drawable/ic_menu_preferences"
+        />
+    <item
+        android:id="@+id/optionsMenu_help"
+        android:title="@string/opt_menu_help"
+        android:icon="@android:drawable/ic_menu_edit"
+        />
+    <item
+        android:id="@+id/optionsMenu_info"
+        android:title="@string/opt_menu_info"
+        android:icon="@android:drawable/ic_menu_info_details"
+        />
+
+</menu>

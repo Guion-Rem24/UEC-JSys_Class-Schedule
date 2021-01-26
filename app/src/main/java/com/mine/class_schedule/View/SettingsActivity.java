@@ -3,6 +3,7 @@ package com.mine.class_schedule.View;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.ActionBar;
@@ -17,8 +18,10 @@ import com.mine.class_schedule.ui.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity implements  PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
 
+    private static final String TAG = "SettingsActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "[onCreate]");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
@@ -37,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity implements  PreferenceFr
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG,"[onStart]");
         // レイアウトルートの背景をテーマ設定の値によって変更
         RelativeLayout root = findViewById(R.id.relative_settings);
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -52,6 +56,7 @@ public class SettingsActivity extends AppCompatActivity implements  PreferenceFr
 
     @Override
     public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen pref) {
+        Log.d(TAG,"[onPreferenceStartScreen]");
         // Fragmentの切り替えと、addToBackStackで戻るボタンを押した時に前のFragmentに戻るようにする
         getSupportFragmentManager()
                 .beginTransaction()

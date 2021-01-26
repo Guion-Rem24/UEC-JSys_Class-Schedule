@@ -1,33 +1,24 @@
 package com.mine.class_schedule;
 
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 
-import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mine.class_schedule.R;
-import com.mine.class_schedule.ScreenOffReceiver;
-
-import java.lang.reflect.Array;
+import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 public class OverlayService extends Service{//implements View.OnTouchListener, View.OnClickListener {
     private static WindowManager windowManager;
@@ -37,6 +28,7 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
     private ScreenOffReceiver mReceiver = null;
     private static WindowManager.LayoutParams params;
     private static Point displaySize;
+    private MyClass classData;
     public OverlayService() {
         Log.d(TAG, "[Constructor]");
     }
@@ -46,6 +38,19 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
     @Override
     public int onStartCommand(Intent intent, int flag, int startId){
         Log.d(TAG, "[onStartCommand]");
+        classData = (MyClass) intent.getSerializableExtra("ClassData");
+        if(classData != null){
+            Log.d(TAG, "[extract DATA] " +
+                    "\nclassPos:   " + TYPE_CLASS.getPeriodString(classData.getClassPos()) + " on " + TYPE_CLASS.getDayString(classData.getClassPos()) +
+                    "\nclassName:  " + classData.getClassName() +
+                    "\nclassPlace: " + classData.getClassPlace() +
+                    "\nOnline URL: " + classData.getOnlineUrl() +
+                    "\nisOnline:   " + classData.getOnlineFlag() +
+                    "\npreAlertNum:" + classData.getAlertNum() +
+                    "\npreAlerts = {" + classData.getAlert1() + ", " + classData.getAlert2() + ", " + classData.getAlert3() + "}");
+        } else {
+            Log.d(TAG, "classData is null");
+        }
         windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
         displaySize = new Point();
@@ -101,6 +106,18 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
                 @Override
                 public void onClick(View v) {
                     Log.d("debug", "onClick");
+                    { // TODO:実機で確認
+                        Log.d(TAG, "Zoom URL:"+classData.getOnlineUrl());
+                        Intent toChrome = new Intent(Intent.ACTION_VIEW, Uri.parse(classData.getOnlineUrl()));
+                        toChrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        toChrome.setPackage("com.android.chrome");
+                        try {
+                            getApplicationContext().startActivity(toChrome);
+                        } catch (ActivityNotFoundException ex) {
+                            toChrome.setPackage(null);
+                            getApplicationContext().startActivity(toChrome);
+                        }
+                    }
 //                stopSelf();
                     onDestroy();
                 }

@@ -1,5 +1,31 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:key="preference_root">
 
+    <PreferenceCategory app:title="講義の時間">
+        <com.mine.class_schedule.TimePreference
+            app:title="1限目"
+            app:key="period1" />
+<!--            android:dialogLayout="@layout/dialog_time_preference"/>-->
+        <com.mine.class_schedule.TimePreference
+            app:title="2限目"
+            app:key="period2" />
+<!--            android:dialogLayout="@layout/dialog_time_preference"/>-->
+        <com.mine.class_schedule.TimePreference
+            app:title="3限目"
+            app:key="period3" />
+<!--            android:dialogLayout="@layout/dialog_time_preference"/>-->
+        <com.mine.class_schedule.TimePreference
+            app:title="4限目"
+            app:key="period4" />
+<!--            android:dialogLayout="@layout/dialog_time_preference"/>-->
+        <com.mine.class_schedule.TimePreference
+            app:title="5限目"
+            app:key="period5" />
+<!--            android:dialogLayout="@layout/dialog_time_preference"/>-->
+    </PreferenceCategory>
     <PreferenceCategory app:title="@string/messages_header">
 
         <EditTextPreference
@@ -31,65 +57,65 @@
             app:title="@string/attachment_title" />
 
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/messages_header">
+<!--    <PreferenceCategory app:title="@string/messages_header">-->
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+<!--        <EditTextPreference-->
+<!--            app:key="signature"-->
+<!--            app:title="@string/signature_title"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+<!--        <ListPreference-->
+<!--            app:defaultValue="reply"-->
+<!--            app:entries="@array/reply_entries"-->
+<!--            app:entryValues="@array/reply_values"-->
+<!--            app:key="reply"-->
+<!--            app:title="@string/reply_title"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
-    </PreferenceCategory>
-    <PreferenceCategory app:title="@string/sync_header">
+<!--    </PreferenceCategory>-->
+<!--    <PreferenceCategory app:title="@string/sync_header">-->
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="sync"-->
+<!--            app:title="@string/sync_title" />-->
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+<!--        <SwitchPreferenceCompat-->
+<!--            app:dependency="sync"-->
+<!--            app:key="attachment"-->
+<!--            app:summaryOff="@string/attachment_summary_off"-->
+<!--            app:summaryOn="@string/attachment_summary_on"-->
+<!--            app:title="@string/attachment_title" />-->
 
-    </PreferenceCategory>
-    <PreferenceCategory app:title="@string/messages_header">
+<!--    </PreferenceCategory>-->
+<!--    <PreferenceCategory app:title="@string/messages_header">-->
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+<!--        <EditTextPreference-->
+<!--            app:key="signature"-->
+<!--            app:title="@string/signature_title"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+<!--        <ListPreference-->
+<!--            app:defaultValue="reply"-->
+<!--            app:entries="@array/reply_entries"-->
+<!--            app:entryValues="@array/reply_values"-->
+<!--            app:key="reply"-->
+<!--            app:title="@string/reply_title"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
-    </PreferenceCategory>
-    <PreferenceCategory app:title="@string/sync_header">
+<!--    </PreferenceCategory>-->
+<!--    <PreferenceCategory app:title="@string/sync_header">-->
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="sync"-->
+<!--            app:title="@string/sync_title" />-->
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+<!--        <SwitchPreferenceCompat-->
+<!--            app:dependency="sync"-->
+<!--            app:key="attachment"-->
+<!--            app:summaryOff="@string/attachment_summary_off"-->
+<!--            app:summaryOn="@string/attachment_summary_on"-->
+<!--            app:title="@string/attachment_title" />-->
 
-    </PreferenceCategory>
+<!--    </PreferenceCategory>-->
 
 </PreferenceScreen>

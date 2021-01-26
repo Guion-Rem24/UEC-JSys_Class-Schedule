@@ -1,6 +1,7 @@
 package com.mine.class_schedule.ui.classview;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 
 import com.mine.class_schedule.Model.MyClass;
@@ -47,13 +49,12 @@ public class ClassTableView extends TableLayout {
     private void init(Context context){
         classes = new ClassView[5][6];
         tableRow = new ClassRowView[5];
+        inflater = LayoutInflater.from(context);
+        View root = inflater.inflate(R.layout.classtable_layout, this, true);
 
         for(int p=0;p<5;p++){
-            inflater = LayoutInflater.from(context);
 //            ClasstableLayoutBinding root = DataBindingUtil.inflate(inflater, R.layout.classtable_layout, this, true);
-            View root = inflater.inflate(R.layout.classtable_layout, this, true);
             int id = getResources().getIdentifier("period_"+(p+1), "id", context.getPackageName());
-
             if(id != 0) tableRow[p] = (ClassRowView) root.findViewById(id);
             for(int day=0;day<6;day++){
                 int dayId = getResources().getIdentifier("day_"+day, "id", context.getPackageName());
@@ -80,6 +81,7 @@ public class ClassTableView extends TableLayout {
         return classes[period][day];
     }
 
+
     public void updateClassesUI(List<MyClass> myClasses){
         for(MyClass c : myClasses){
             int[] pos = TYPE_CLASS.getClassPos(c.getClassPos()); // day, period
@@ -89,7 +91,11 @@ public class ClassTableView extends TableLayout {
             String place = c.getClassPlace();
             if(TextUtils.isEmpty(place)) place = "place";
             if(c.getOnlineFlag()) place = "Online";
-            classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.material_on_primary_disabled, null));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.material_on_primary_disabled, null));
+            } else {
+                classes[pos[1]][pos[0]].setPlace(place, R.color.material_on_background_disabled);
+            }
         }
     }
 
@@ -97,6 +103,14 @@ public class ClassTableView extends TableLayout {
         for(ClassView[] c_ : classes){
             for(ClassView c : c_){
                 c.setClass();
+            }
+        }
+    }
+
+    public void setLayoutSize(int width, int height){
+        for(ClassView[] c_ :classes){
+            for(ClassView c : c_){
+                c.setViewSize(width/6, height/5);
             }
         }
     }

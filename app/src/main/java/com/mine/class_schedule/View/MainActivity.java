@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,9 @@ import com.mine.class_schedule.ui.notifications.NotificationsFragment;
 import com.mine.class_schedule.ui.notifications.NotificationsViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
- // Alert Sample
+// Alert Sample
  // https://mura-hiro.com/android-dev-sample-alarm-clock/
  // https://akira-watson.com/android/alarmmanager-timer.html
 
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setTitle("Home");
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         pagerAdapter = new ViewPagerAdapter(this);
 //        For ViewPager
         //  viewPager = new BottomNavigationViewPager(getApplicationContext());
@@ -264,6 +267,36 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_preferences, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem mItem){
+        switch(mItem.getItemId()){
+            case R.id.optionsMenu_Pref:
+                Toast.makeText(getApplicationContext(),"'設定' is selected...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                Log.d(TAG, "...onOptionsItemSelected is active");
+                return true;
+            case R.id.optionsMenu_help:
+                Toast.makeText(getApplicationContext(),"'ヘルプ' is selected...", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.optionsMenu_info:
+                Toast.makeText(getApplicationContext(), "'お知らせ' is selected...", Toast.LENGTH_LONG).show();
+                return true;
+//            case R.id.action_settings:
+//                Toast.makeText(getApplicationContext(), "'action_settings' is selected...", Toast.LENGTH_LONG).show();
+//                return true;
+            default:
+                return super.onOptionsItemSelected(mItem);
+        }
+    }
+
     // そもそもsetup自体もいらないのでは
     /*
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -328,7 +361,7 @@ public class MainActivity extends AppCompatActivity{
         private List<Fragment> mFrags;
         private LayoutInflater inflater;
 
-        private final String TAG="ViewPagerRecyclerAdapter";
+        private static final String TAG="ViewPagerRecyclerAdapter";
 
 
 //        @Override

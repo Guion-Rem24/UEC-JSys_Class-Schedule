@@ -1,21 +1,15 @@
 package com.mine.class_schedule.View;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -25,7 +19,12 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -34,10 +33,8 @@ import com.mine.class_schedule.EditClassViewModel;
 import com.mine.class_schedule.Model.MyClass;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
-import com.mine.class_schedule.ui.home.HomeFragment;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class EditClassActivity extends AppCompatActivity {
@@ -53,7 +50,8 @@ public class EditClassActivity extends AppCompatActivity {
     private final String HINT_URL = "オンライン講義のURL...";
 
     private final String TAG="EditClassActivity";
-    private ConstraintLayout root;
+    private CoordinatorLayout root;
+    private Toolbar toolbar;
     private InputMethodManager inputMethodManager;
     private EditClassViewModel editClassViewModel;
     private TextInputEditText editClassPlace, editClassName, editOnlineUrl;
@@ -268,7 +266,9 @@ public class EditClassActivity extends AppCompatActivity {
                 }
                 if(classPlaceChangedFlag){
                     if( !TextUtils.isEmpty(editClassPlace.getText()) ){
-                        classData.setClassPlace(Objects.requireNonNull(editClassPlace.getText()).toString());
+
+                        classData.setClassPlace(editClassPlace.getText().toString());
+
                     } else {
                         classData.setClassPlace("");
                     }
@@ -276,7 +276,9 @@ public class EditClassActivity extends AppCompatActivity {
                 if(isOnline){
                     if (classOnlineUrlChangedFlag) {
                         if ( !TextUtils.isEmpty(editOnlineUrl.getText()) ) {
-                            classData.setOnlineUrl(Objects.requireNonNull(editOnlineUrl.getText()).toString());
+                            String url = editOnlineUrl.getText().toString();
+                            url = url.replaceAll(" ", "");
+                            classData.setOnlineUrl(url);
                         } else {
                             /* TODO: show()した後，すぐにfinish()されてしまう．
                             new AlertDialog.Builder(EditClassActivity.this)
@@ -342,6 +344,7 @@ public class EditClassActivity extends AppCompatActivity {
 
     private void findViews(){
         root = findViewById(R.id.activity_edit_class);
+        toolbar = findViewById(R.id.editclass_toolbar);
 //        editClassViewModel = new ViewModelProvider(this).get(EditClassViewModel.class);
         editClassName = findViewById(R.id.editext_classname);
         editClassPlace = findViewById(R.id.edittext_place);
@@ -368,7 +371,7 @@ public class EditClassActivity extends AppCompatActivity {
         preAlertTime = new long[3];
     }
     private boolean isDataChanged(){
-        return (classNameChangedFlag && classPlaceChangedFlag && classOnlineUrlChangedFlag);
+        return (classNameChangedFlag || classPlaceChangedFlag || classOnlineUrlChangedFlag);
     }
 
     private int smallInactiveAlert(){
@@ -425,6 +428,12 @@ public class EditClassActivity extends AppCompatActivity {
         // others also get here;
     }
     private void setDisplayedValues(){
+        toolbar.setTitle(String.format("%s %s",TYPE_CLASS.getDayString(classPos), TYPE_CLASS.getPeriodString(classPos)));
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         editClassName.setText(preClassName);
         editClassPlace.setText(preClassPlace);
         if(isOnline) switchingOnline(true,false);
@@ -455,17 +464,29 @@ public class EditClassActivity extends AppCompatActivity {
         if(flag){
             ifOnlineBox.setChecked(true);
             editClassPlace.setEnabled(false);
-            layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.disableColor,null));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.disableColor, null));
+            } else {
+                layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.disableColor));
+            }
             if(animFlag) layoutEditOnlineUrl.startAnimation(inAnimation);
             layoutEditOnlineUrl.setVisibility(View.VISIBLE);
             editClassPlace.setText("オンライン講義");
-            editClassPlace.setTextColor(getResources().getColor(R.color.black, null));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                editClassPlace.setTextColor(getResources().getColor(R.color.black, null));
+            } else {
+                editClassPlace.setTextColor(getResources().getColor(R.color.black));
+            }
             isOnline = true;
             classOnlineUrlChangedFlag = true;
         } else {
             ifOnlineBox.setChecked(false);
             editClassPlace.setEnabled(true);
-            layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.white,null));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.white,null));
+            } else {
+                layoutEditPlace.setBackgroundColor(getResources().getColor(R.color.white));
+            }
 //                    layoutEditOnlineUrl.setVisibility(View.INVISIBLE);
             if(animFlag) layoutEditOnlineUrl.startAnimation(outAnimation);
             layoutEditOnlineUrl.setVisibility(View.GONE);
@@ -488,10 +509,62 @@ public class EditClassActivity extends AppCompatActivity {
             ctr++;
         }
         for(int i=ctr;i<3;i++){
-            alerts[i] = 0;
+            alerts[i] = 99;
         }
         Arrays.sort(alerts);
         return alerts;
     }
 
+    @Override
+    public void onBackPressed(){
+        if(isDataChanged()){
+            new AlertDialog.Builder(EditClassActivity.this)
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                    .setTitle("注意")
+                    .setMessage("データが変更されています。\n保存されませんがよろしいですか？")
+                    .setPositiveButton("はい", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which){
+                            EditClassActivity.this.finish();
+                        }
+                    })
+                    .setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).create().show();
+//            new AlertDialog.Builder(EditClassActivity.this)
+////                                    .setIcon(R. )
+//                    .setTitle("注意")
+//                    .setMessage("オンライン講義のURLがありません．\n対面講義として扱われますが，\n続行しますか？")
+//                    .setPositiveButton("はい", new DialogInterface.OnClickListener(){
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            replyIntent.putExtra(EXTRA_REPLY + DATA_URL, "");
+//                        }
+//                    })
+//                    .setNegativeButton("いいえ", null)
+////                                    .create()
+//                    .show();
+
+        }
+        else {
+            super.onBackPressed();
+        }
+        Log.d(TAG,"[onBackPressed]");
+    }
+
 }
+
+/**
+ * MinemuraKohei 峯村晃平さんがあなたを予約されたZoomミーティングに招待しています。
+ *
+ * トピック: MinemuraKohei 峯村晃平のパーソナルミーティングルーム
+ *
+ * Zoomミーティングに参加する
+ * https://uec-tokyo.zoom.us/j/9513830171?pwd=UUE5K3IrZWMwd0Fqdk44MytFeTkwZz09
+ *
+ * ミーティングID: 951 383 0171
+ * パスコード: 0836126968
+ */
