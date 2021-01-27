@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.mine.class_schedule.Model.ClassRepository;
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.ClassRepository;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 
 import java.util.List;
 

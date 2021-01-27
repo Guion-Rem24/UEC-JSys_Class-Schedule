@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 public class OverlayService extends Service{//implements View.OnTouchListener, View.OnClickListener {
@@ -40,7 +40,7 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         Log.d(TAG, "[onStartCommand]");
 
         if(intent != null) {
-            Log.d(TAG,"intent: "+intent.getPackage());
+            Log.d(TAG,"intent: "+intent);
             classData = (MyClass) intent.getSerializableExtra("ClassData");
         } else {
             Log.d(TAG, "intent is null");
@@ -136,28 +136,6 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         }
 
         root_view.setOnTouchListener( new OnFrameMovingListener() );
-        Log.d("debug", "root_view := ("+root_view.getWidth()+","+root_view.getHeight()+")");
-        Log.d(TAG,"-- "+Gravity.TOP+" -- "+Gravity.END); //  -- 48 -- 8388613
-
-        root_view.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("debug", "root_view := ("+root_view.getLeft()+","+root_view.getTop()+")");
-                int loc[] = new int[2];
-                root_view.getLocationInWindow(loc);
-                Log.d("debug", "LocationInWindow:= ("+loc[0]+","+loc[1]+")");
-                root_view.getLocationOnScreen(loc);
-                Log.d("debug", "LocationOnScreen:= ("+loc[0]+","+loc[1]+")");
-                Log.d("debug", "display size := ("+displaySize.x+","+displaySize.y+")");
-
-            }
-        });
-        view.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("debug", "view := ("+view.findViewById(R.id.text_overlay).getWidth()+","+view.findViewById(R.id.text_overlay).getHeight()+")");
-            }
-        });
 
 //        root_view.setOnClickListener(new View.OnClickListener() {
 //            @Override

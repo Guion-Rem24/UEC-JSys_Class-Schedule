@@ -5,10 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.mine.class_schedule.Model.ClassRepository;
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.ClassRepository;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 
 import java.util.List;
 

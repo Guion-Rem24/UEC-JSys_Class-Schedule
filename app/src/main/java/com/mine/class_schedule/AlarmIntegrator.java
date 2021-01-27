@@ -9,7 +9,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
+import com.mine.class_schedule.Model.Alarm.TYPE_ALARM;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 import java.util.Calendar;
@@ -25,16 +26,16 @@ public class AlarmIntegrator {
     public static final String ACTION_ALARM = "ACTION_CLASS_ALARM";
     public AlarmIntegrator(Context mContext){
         context = mContext;
-        mReceiver = new AlarmBroadcastReceiver();
-        filter = new IntentFilter("FILTER_ACTION_CLASS_ALARM");
-        mContext.registerReceiver(mReceiver, filter);
+//        mReceiver = new AlarmBroadcastReceiver();
+//        filter = new IntentFilter("FILTER_ACTION_CLASS_ALARM");
+//        mContext.registerReceiver(mReceiver, filter);
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Log.d(TAG, "[Constructor]");
     }
 
 
 
-
+    // alarm numberを指定して行う必要あり
     public void addAlarm(byte posId, long alarm, MyClass mClassData){
         int hour, min;
         int nowDay;
@@ -101,9 +102,14 @@ public class AlarmIntegrator {
         intent.setAction(ACTION_ALARM);
         return PendingIntent
                 .getBroadcast(context,
+                // generateRequestCode(num),
                 PendingIntent.FLAG_ONE_SHOT,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private int generateRequestCode(int number){
+        return ((int) (classData.getAlert(number) | TYPE_ALARM.getAlarm(number)));
     }
 
 }

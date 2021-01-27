@@ -3,8 +3,6 @@ package com.mine.class_schedule.ui.classview;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
-import android.os.AsyncTask;
-import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -15,11 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.View.EditClassActivity;
 import com.mine.class_schedule.View.MainActivity;
-import com.mine.class_schedule.ui.home.HomeFragment;
-import com.mine.class_schedule.ui.home.HomeViewModel;
 
 //import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 

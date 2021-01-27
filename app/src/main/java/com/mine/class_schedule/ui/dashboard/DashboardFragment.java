@@ -1,8 +1,5 @@
 package com.mine.class_schedule.ui.dashboard;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +19,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mine.class_schedule.AlarmIntegrator;
 import com.mine.class_schedule.AlertService;
-import com.mine.class_schedule.LayerService;
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.OverlayService;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.R;

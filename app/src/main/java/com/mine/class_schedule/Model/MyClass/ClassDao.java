@@ -1,4 +1,4 @@
-package com.mine.class_schedule.Model;
+package com.mine.class_schedule.Model.MyClass;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

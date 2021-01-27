@@ -26,9 +26,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
-import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 import com.mine.class_schedule.ui.dashboard.DashboardFragment;
 import com.mine.class_schedule.ui.dashboard.DashboardViewModel;
 import com.mine.class_schedule.ui.home.HomeFragment;

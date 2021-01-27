@@ -1,6 +1,5 @@
 package com.mine.class_schedule.View;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mine.class_schedule.EditClassViewModel;
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 

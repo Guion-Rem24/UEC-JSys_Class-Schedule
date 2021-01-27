@@ -1,4 +1,4 @@
-package com.mine.class_schedule.Model;
+package com.mine.class_schedule.Model.MyClass;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

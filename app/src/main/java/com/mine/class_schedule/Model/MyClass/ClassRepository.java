@@ -1,4 +1,4 @@
-package com.mine.class_schedule.Model;
+package com.mine.class_schedule.Model.MyClass;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
-import java.util.Set;
 
 public class ClassRepository {
     private final String TAG = "ClassRepository";

@@ -1,6 +1,5 @@
 package com.mine.class_schedule.ui.home;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.Alarm.Alarm;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.ui.classview.ClassTableView;
@@ -29,6 +29,7 @@ public class HomeFragment extends Fragment {
 //    private HomeFragmentBinding binding;
     private View root;
     private List<MyClass> classList;
+    private List<Alarm> alarmList;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -61,6 +62,18 @@ public class HomeFragment extends Fragment {
                 classTableView.setClassData();
                 // UI update
                 classTableView.updateClassesUI(classes);
+            }
+        });
+
+        homeViewModel.getAllAlarms().observe(getViewLifecycleOwner(), new Observer<List<Alarm>>() {
+            @Override
+            public void onChanged(List<Alarm> alarms) {
+                Log.d(TAG, "[Observe] List<Alarm> is Changed");
+                if(alarms == null){
+                    Log.d(TAG, "alarms is null");
+                }
+                // TODO: AlarmRoomDatabaseへalarmの追加を行い，変更を受け取った時にAlarmIntegrator.addAlarm()する
+
             }
         });
 

@@ -4,16 +4,12 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import androidx.annotation.RequiresApi;
-import androidx.databinding.DataBindingUtil;
-
-import com.mine.class_schedule.Model.MyClass;
+import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
 
 import java.util.List;
