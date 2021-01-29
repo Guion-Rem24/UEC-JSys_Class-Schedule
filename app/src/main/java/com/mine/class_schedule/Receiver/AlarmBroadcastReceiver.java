@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.mine.class_schedule.Model.MyClass.MyClass;
+import com.mine.class_schedule.Service.OverlayService;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {

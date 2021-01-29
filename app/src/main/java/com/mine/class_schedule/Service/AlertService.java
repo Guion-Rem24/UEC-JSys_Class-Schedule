@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;

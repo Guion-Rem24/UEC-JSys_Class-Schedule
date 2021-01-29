@@ -1,8 +1,10 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.mine.class_schedule.Service.AlertService;
 
 public class PackageReplacedReceiver extends BroadcastReceiver {
 

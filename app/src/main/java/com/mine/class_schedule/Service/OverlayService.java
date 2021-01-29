@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Service;
 
 import android.app.Service;
 import android.content.ActivityNotFoundException;
@@ -16,15 +16,27 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.mine.class_schedule.Model.MyClass.MyClass;
+import com.mine.class_schedule.R;
+import com.mine.class_schedule.Receiver.ScreenOffReceiver;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
+
+// TODO: Serviceが終了した時に，来週のalarmをセット
 public class OverlayService extends Service{//implements View.OnTouchListener, View.OnClickListener {
-    private static WindowManager windowManager;
     private final String TAG="OverlayService";
+
+    private static WindowManager windowManager;
     private static View view;
     private static View root_view;
+    private LayoutInflater inflater;
+    private Button requestButton;
+    private ImageButton cancelButton;
+    private Button shareButton;
+
     private ScreenOffReceiver mReceiver = null;
     private static WindowManager.LayoutParams params;
     private static Point displaySize;
@@ -58,120 +70,18 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         } else {
             Log.d(TAG, "classData is null");
         }
-        windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+
+        // viewの取得
+        findViews();
 
         displaySize = new Point();
         windowManager.getDefaultDisplay().getSize(displaySize);
 
         // Layoutのparam設定
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-            params = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,  // API 26 or later
-//                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,         // API 25 or before
-//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                    PixelFormat.TRANSLUCENT);
-        } else {
-            params = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-//                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,  // API 26 or later
-                    // API 25 or before
-//                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT |
-//                            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                    WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                            | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                            | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                            | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-//                            | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-//                            | WindowManager.LayoutParams.FLAG_FULLSCREEN
-                    ,
-                    PixelFormat.TRANSLUCENT);
-        }
+        setLayoutParams();
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-
-        params.gravity = Gravity.END | Gravity.TOP; // 左右逆
-//        params.gravity = Gravity.TOP | Gravity.START;
-//        params.gravity = Gravity.BOTTOM | Gravity.START; // 上下逆
-//        params.gravity = Gravity.END | Gravity.BOTTOM; // 上下左右逆
-
-        root_view = inflater.inflate(R.layout.overlay_layout, null);
-        view = root_view.findViewById(R.id.overlay_layout);
-        Button overlayButton = (Button) view.findViewById(R.id.button_overlay);
-        Log.d("debug", "overlayButton := ("+overlayButton.getBottom()+","+overlayButton.getRight()+")");
-        if(overlayButton != null){
-            overlayButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("debug", "onClick");
-                    { // TODO:実機で確認
-                        Log.d(TAG, "Zoom URL:"+classData.getOnlineUrl());
-                        Intent toChrome = new Intent(Intent.ACTION_VIEW, Uri.parse(classData.getOnlineUrl()));
-                        toChrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        toChrome.setPackage("com.android.chrome");
-                        try {
-                            getApplicationContext().startActivity(toChrome);
-                        } catch (ActivityNotFoundException ex) {
-                            toChrome.setPackage(null);
-                            getApplicationContext().startActivity(toChrome);
-                        }
-                    }
-//                stopSelf();
-                    onDestroy();
-                }
-            });
-        }
-
-        if(!view.isAttachedToWindow()){
-            Log.d("debug", "view is not attached");
-        }
-
-        root_view.setOnTouchListener( new OnFrameMovingListener() );
-
-//        root_view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                RelativeLayout grandParent = (RelativeLayout) v.getParent().getParent();
-//                grandParent.callOnClick();
-//            }
-//        });
-//        root_view.setOnTouchListener(new OnMovingListener());
-
-        // ViewにTouchListenerを設定する ///////////////
-        // API 25 以前の場合，TouchListenerが働いていない．
-//        view.setOnTouchListener(new View.OnTouchListener(){
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                Log.d("debug","onTouch");
-//                if(event.getAction() == MotionEvent.ACTION_DOWN){
-//                    Log.d("debug","ACTION_DOWN");
-//                }
-//                if(event.getAction() == MotionEvent.ACTION_UP){
-//                    Log.d("debug","ACTION_UP");
-//
-//                    // warning: override performClick()
-//                    view.performClick();
-//
-//                    // Serviceを自ら停止させる
-////                    stopSelf();
-//                    onDestroy();
-//                    return true;
-//                }
-//                return false;
-//            }
-////            @Override
-////            public void onTouchEvent(){}
-//        });
-//        view.setOnTouchListener(new OnMovingListener());
+        // 各種Listenerのセッティング
+        setListeners();
 
         /* receiverの登録　//////////////////////////// */
 //        mReceiver = new ScreenOffReceiver(windowManager, view);
@@ -184,7 +94,6 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         // WindowManagerによるViewの追加 ///////////////
         windowManager.addView(root_view, params);
 
-//        RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.activity_main, null);
         Log.d(TAG, "[onStartCommand]");
         return super.onStartCommand(intent, flag, startId);
     }
@@ -358,18 +267,129 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         }
 
     }
-/*
-    private static void convertCoordinateFrom(WindowManager.LayoutParams[] params, MotionEvent event, int dx, int dy){
-        final int[] viewWidth = new int[1];
-        final int[] viewHeight = new int[1];
-        int x = (int)event.getRawX();
-        int y = (int)event.getRawY();
-        int X = params[0].x;
-        int Y = params[0].y;
+    private void findViews(){
+        inflater = LayoutInflater.from(this);
+        windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
-        params[0].x = x - ( - dx + X);
-        params[0].y = y - ( - dy + Y);
-
+        root_view = inflater.inflate(R.layout.overlay_layout, null);
+        view = root_view.findViewById(R.id.overlay_layout);
+        requestButton = view.findViewById(R.id.request_button_overlay);
+        cancelButton = view.findViewById(R.id.cancel_button_overlay);
+        shareButton = view.findViewById(R.id.share_button_overlay);
     }
- */
+
+    private void setLayoutParams(){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+            params = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,  // API 26 or later
+//                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,         // API 25 or before
+//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+                    PixelFormat.TRANSLUCENT);
+        } else {
+            params = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+//                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,  // API 26 or later
+                    // API 25 or before
+//                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT |
+//                            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                    WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                            | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                            | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+//                            | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+//                            | WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    ,
+                    PixelFormat.TRANSLUCENT);
+        }
+
+//        params.gravity = Gravity.END | Gravity.TOP; // 左右逆
+//        params.gravity = Gravity.TOP | Gravity.START;
+//        params.gravity = Gravity.BOTTOM | Gravity.START; // 上下逆
+//        params.gravity = Gravity.END | Gravity.BOTTOM; // 上下左右逆
+    }
+
+    private void setListeners(){
+        root_view.setOnTouchListener( new OnFrameMovingListener() );
+
+        if(requestButton != null){
+            requestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("debug", "onClick");
+                    {
+                        Log.d(TAG, "Zoom URL:"+classData.getOnlineUrl());
+                        if(classData.getOnlineUrl().equals("") || classData.getOnlineUrl() ==null){
+                            Toast.makeText(getApplicationContext(), "この講義にはURLが保存されていません。", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        if(!classData.getOnlineFlag()){
+                            Toast.makeText(getApplicationContext(), "この講義はオンライン講義ではありません。", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Intent toChrome = new Intent(Intent.ACTION_VIEW, Uri.parse(classData.getOnlineUrl()));
+                        toChrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        toChrome.setPackage("com.android.chrome");
+                        try {
+                            getApplicationContext().startActivity(toChrome);
+                        } catch (ActivityNotFoundException ex) {
+                            toChrome.setPackage(null);
+                            getApplicationContext().startActivity(toChrome);
+                        }
+                    }
+//                stopSelf();
+                    onDestroy();
+                }
+            });
+        }
+
+        if(cancelButton != null){
+            cancelButton.setOnClickListener(v -> {
+                onDestroy();
+            });
+        }
+
+        if(shareButton != null){
+            shareButton.setOnClickListener(v -> {
+                // TODO: 共有機能の実装
+                Log.d(TAG,"[onClick] shareButton");
+            });
+        }
+
+        // ViewにTouchListenerを設定する ///////////////
+        // API 25 以前の場合，TouchListenerが働いていない．
+//        view.setOnTouchListener(new View.OnTouchListener(){
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                Log.d("debug","onTouch");
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    Log.d("debug","ACTION_DOWN");
+//                }
+//                if(event.getAction() == MotionEvent.ACTION_UP){
+//                    Log.d("debug","ACTION_UP");
+//
+//                    // warning: override performClick()
+//                    view.performClick();
+//
+//                    // Serviceを自ら停止させる
+////                    stopSelf();
+//                    onDestroy();
+//                    return true;
+//                }
+//                return false;
+//            }
+////            @Override
+////            public void onTouchEvent(){}
+//        });
+//        view.setOnTouchListener(new OnMovingListener());
+    }
 }

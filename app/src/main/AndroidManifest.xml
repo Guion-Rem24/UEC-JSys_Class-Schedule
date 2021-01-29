@@ -9,6 +9,9 @@
     <!-- For Overlay over API 28 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!-- For Vibration -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,27 +22,27 @@
         <activity android:name=".View.EditClassActivity" />
 
         <receiver
-            android:name=".ButtonClickedReceiver"
+            android:name=".Receiver.ButtonClickedReceiver"
             android:enabled="true"
             android:exported="true" />
 
-        <receiver android:name=".ScreenOffReceiver"
+        <receiver android:name=".Receiver.ScreenOffReceiver"
             android:enabled="true"
             android:exported="true" />
 
-        <receiver android:name=".AlarmBroadcastReceiver"
+        <receiver android:name=".Receiver.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name=".LayerService"
+            android:name=".Service.LayerService"
             android:enabled="true"
             android:exported="true" />
-        <service android:name=".OverlayService"
+        <service android:name=".Service.OverlayService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".AlertService"
+            android:name=".Service.AlertService"
             android:exported="false" /> <!-- <service android:name=".LockScreenStateReceiver"/> -->
         <!-- <receiver -->
         <!-- android:name=".PackageReplacedReceiver" -->
@@ -59,7 +62,7 @@
         </activity>
 
         <receiver
-            android:name=".PackageReplacedReceiver"
+            android:name=".Receiver.PackageReplacedReceiver"
             android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />

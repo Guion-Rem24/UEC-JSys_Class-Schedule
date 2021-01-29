@@ -18,9 +18,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mine.class_schedule.AlarmIntegrator;
-import com.mine.class_schedule.AlertService;
+import com.mine.class_schedule.Service.AlertService;
 import com.mine.class_schedule.Model.MyClass.MyClass;
-import com.mine.class_schedule.OverlayService;
+import com.mine.class_schedule.Service.OverlayService;
 import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
@@ -105,7 +105,7 @@ public class DashboardFragment extends Fragment {
                 } else {
                     MyClass classData = null;
                     for (MyClass c : classList) {
-                        if (c.getClassPos() == (byte) (TYPE_CLASS.getDay(1) | TYPE_CLASS.getPeriod(4))) { // test 月曜1限目
+                        if (c.getClassPos() == (byte) (TYPE_CLASS.getDay(2) | TYPE_CLASS.getPeriod(4))) { // test
                             classData = c;
                             break;
                         }
@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
                             "\npreAlertNum:" + classData.getAlertNum() +
                             "\npreAlerts = {"+classData.getAlert1()+", "+classData.getAlert2()+", "+classData.getAlert3()+"}");
                     AlarmIntegrator integrator = new AlarmIntegrator(getContext());
-                    integrator.addAlarm(classData.getClassPos(), classData.getAlert1(), classData);
+                    integrator.addAlarm(classData, 0);
                 }
                 // Receiverで受けてやってほうがいいかも
 //                if(!activatedlayerService) {

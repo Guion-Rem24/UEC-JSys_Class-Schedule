@@ -1,4 +1,4 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

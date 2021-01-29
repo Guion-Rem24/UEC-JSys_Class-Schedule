@@ -1,25 +1,40 @@
 package com.mine.class_schedule.ui.classview;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Outline;
 import android.graphics.Point;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.mine.class_schedule.Model.MyClass.MyClass;
+import com.mine.class_schedule.R;
 import com.mine.class_schedule.View.EditClassActivity;
 import com.mine.class_schedule.View.MainActivity;
 
-//import com.mine.class_schedule.ui.classview.TYPE_CLASS;
-
 public class ClassView extends ConstraintLayout implements View.OnClickListener{
+
     private final String TAG = "ClassView-";
     private int mDay;
     private int mPeriod;
@@ -28,6 +43,16 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     private TextView nameView;
     private TextView placeView;
     private MyClass classData;
+
+    private final long LONG_PRESSED_TIME = 800; // milli sec
+
+    private Handler handler;
+    private Runnable longPressedReceiver;
+    private Vibrator vibrator;
+    private boolean longPressed = false;
+
+    private int mWidth;
+    private int mHeight;
 
     public ClassView(Context context) {
         super(context);
@@ -43,44 +68,113 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
 
     private void init(Context context){
         setOnClickListener(this);
-        Log.d(TAG, "[init], context:"+context.getClass().getName());
-
         posId = 0x00;
 
-//        nameView = this.findViewById(R.id.text_classname);
-//        placeView = this.findViewById(R.id.text_classplace);
+        handler = new Handler();
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // hover animation via clicked
+        StateListAnimator stateListAnimator = AnimatorInflater.loadStateListAnimator(mContext, R.drawable.animation_clicked_hover);
+        setStateListAnimator(stateListAnimator);
 
-//        setText("@{String.valueOf(homeViewModel.)");
-//        Log.d(TAG, "id:"+getId());
+        longPressedReceiver = new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "[LongPressed]");
+                longPressed = true;
+                setTranslationZ(1000f);
+//                setOutlineProvider(new ViewOutlineProvider() {
+//                    @Override
+//                    public void getOutline(View view, Outline outline) {
+//                        outline.setRect(0,0,view.getWidth(),view.getHeight());
+//                    }
+//                });
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) { // API 26 未満
+                    vibrator.vibrate(300);
+                } else {
+                    VibrationEffect vibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE);
+                    vibrator.vibrate(vibrationEffect);
+                }
+                if(classData.getOnlineFlag()){
+                    new AlertDialog.Builder(mContext)
+                            .setIcon(R.drawable.ic_baseline_connect_without_contact_24)
+                            .setTitle("オンライン講義へ接続")
+                            .setMessage(String.format("%s のオンライン講義に接続しますか？", classData.getClassName()))
+                            .setPositiveButton("はい", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if(classData.getOnlineUrl().equals("") || classData.getOnlineUrl() == null){
+                                        Toast.makeText(mContext, "オンライン講義のURLを設定してください。",Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        Intent toChrome = new Intent(Intent.ACTION_VIEW, Uri.parse(classData.getOnlineUrl()));
+                                        toChrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        toChrome.setPackage("com.android.chrome");
+                                        try {
+                                            mContext.startActivity(toChrome);
+                                        } catch (ActivityNotFoundException ex) {
+                                            toChrome.setPackage(null);
+                                            mContext.startActivity(toChrome);
+                                        }
+                                    }
+                                }
+                            })
+                            .setNegativeButton("いいえ", null)
+                            .show();
+                } else {
+                    Toast.makeText(mContext, "対面講義です", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "[ACTION_DOWN]");
+                this.setPressed(true);
+//                setOutlineProvider(new Pressed());
+                handler.postDelayed(longPressedReceiver, LONG_PRESSED_TIME);
+                return true;
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "[ACTION_UP]");
+                this.setPressed(false);
+                handler.removeCallbacks(longPressedReceiver);
+                if(!longPressed){
+//                    setOutlineProvider(null);
+                    onClick(this);
+                } else {
+                    longPressed = false;
+                }
+                return true;
+            case MotionEvent.ACTION_BUTTON_PRESS:
+                Log.d(TAG, "ACTION_BUTTON_PRESS");
+                return true;
+        }
+        return false;
     }
 
     @Override
     public void onClick(View v) {
-//        Toast.makeText(getA, TAG+" [onClick]");
+        Log.d(TAG, "[onClick]");
         Intent intent = new Intent(mContext, EditClassActivity.class);
-//        intent.putExtra("ClassName", nameView.getText().toString());
-//        intent.putExtra("ClassPos", posId);
+
         intent.putExtra("ClassPos", (byte)posId);
         intent.putExtra("ClassData", classData);
 
-        Log.d(TAG, "posId: "+TYPE_CLASS.castToString(posId)+", classData:"+classData);
         ((FragmentActivity) mContext).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_CLASS);
     }
 
     public void setDayId(int day){
         mDay = day;
-//        Log.d(TAG,"mDay byte:"+(byte)mDay);
         posId = (byte) ((byte)(posId & TYPE_CLASS.DAY_CLEAR_MASK) | TYPE_CLASS.getDay(mDay));
-        Log.d("mDay:"+mDay, ":"+TYPE_CLASS.castToString(posId));
     }
     public void setDayId(byte day){
         posId = (byte)((byte)(posId & TYPE_CLASS.DAY_CLEAR_MASK) | day);
     }
     public void setPeriodId(int period){ // period in range[0,6], but TYPE_CLASS [0xF0, 0xA0];
         mPeriod = period;
-//        Log.d(TAG, "mPeriod:"+mPeriod+", mPeriod byte:"+((byte)(15-mPeriod) << 4)+", mPeriod getPeriod: "+(TYPE_CLASS.getPeriod(mPeriod)));
         posId = (byte) (posId & TYPE_CLASS.PERIOD_CLEAR_MASK | TYPE_CLASS.getPeriod(mPeriod));
-        Log.d("mPeriod:"+mPeriod, ":"+(TYPE_CLASS.castToString(posId)));
     }
     public void setPeriodId(byte period){
         posId = (byte)((byte)(posId & TYPE_CLASS.PERIOD_CLEAR_MASK) | period);
@@ -91,9 +185,6 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
         setDayId(day);
         setPeriodId(period);
         if(((MainActivity) mContext).getHomeViewModel() == null) Log.d(TAG, "HomeViewModel is null");
-        Log.v(TAG,"posId: "+posId);
-//        new getMyClassAsyncTask( ((MainActivity) mContext).getHomeViewModel() ).execute();
-//        classData = (((MainActivity) mContext)).getHomeFragment().getMyClass(posId);
 
     }
 
@@ -139,91 +230,30 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getSize(displaySize);
 
-//        setLayoutParams(new ConstraintLayout.LayoutParams(width, height));
         setMinWidth(width);
         setMinHeight(height);
+        mWidth = width;
+        mHeight = height;
     }
 
-//    private static class getMyClassAsyncTask extends AsyncTask<Void, Void, Void>{
-//        private HomeViewModel viewModel;
-//
-//        public getMyClassAsyncTask(HomeViewModel vm){ this.viewModel = vm; }
-//
-//        @Override
-//        protected Void doInBackground(final Void... params) {
-//            classData = viewModel.getMyClass(posId);
-//            return null;
-//        }
-//    }
+    private static class Hover extends ViewOutlineProvider{
 
+        private int width;
+        private int height;
+        Hover(int w, int h){ width = w; height = h; }
 
+        @Override
+        public void getOutline(View view, Outline outline) {
+//            outline.setRect(0,0, width, height);
+            view.setElevation(1000f);
+        }
+    }
+    private static class Pressed extends  ViewOutlineProvider{
+
+        @Override
+        public void getOutline(View view, Outline outline) {
+            view.setElevation(-1000f);
+        }
+    }
 }
 
-//public class ClassView extends androidx.appcompat.widget.AppCompatTextView implements View.OnClickListener{
-//    private final String TAG = "ClassView-"+this.getText().toString();
-//    private int mDay;
-//    private int mPeriod;
-//    private byte posId;
-//    private Context mContext;
-//
-//    public ClassView(Context context) {
-//        super(context);
-//        mContext = context;
-//        init(context);
-//    }
-//
-//    public ClassView(Context context, @Nullable AttributeSet attrs) {
-//        super(context, attrs);
-//        mContext = context;
-//        init(context);
-//    }
-//
-//    private void init(Context context){
-//        setOnClickListener(this);
-//        posId = 0x00;
-////        setText("@{String.valueOf(homeViewModel.)");
-////        Log.d(TAG, "id:"+getId());
-//    }
-//
-//    @Override
-//    public void onClick(View v) {
-////        Toast.makeText(getA, TAG+" [onClick]");
-//        Intent intent = new Intent(mContext, EditClassActivity.class);
-//        intent.putExtra("ClassName", getText().toString());
-//        intent.putExtra("ClassPos", posId);
-//        Log.d(TAG, "posId: "+TYPE_CLASS.castToString(posId));
-//        ((FragmentActivity) mContext).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_CLASS);
-//    }
-//
-//    public void setDayId(int day){
-//        mDay = day;
-////        Log.d(TAG,"mDay byte:"+(byte)mDay);
-//        posId = (byte) ((byte)(posId & TYPE_CLASS.DAY_CLEAR_MASK) | TYPE_CLASS.getDay(mDay));
-//        Log.d("mDay:"+mDay, ":"+TYPE_CLASS.castToString(posId));
-//    }
-//    public void setDayId(byte day){
-//        posId = (byte)((byte)(posId & TYPE_CLASS.DAY_CLEAR_MASK) | day);
-//    }
-//    public void setPeriodId(int period){ // period in range[0,6], but TYPE_CLASS [0xF0, 0xA0];
-//        mPeriod = period;
-////        Log.d(TAG, "mPeriod:"+mPeriod+", mPeriod byte:"+((byte)(15-mPeriod) << 4)+", mPeriod getPeriod: "+(TYPE_CLASS.getPeriod(mPeriod)));
-//        posId = (byte) (posId & TYPE_CLASS.PERIOD_CLEAR_MASK | TYPE_CLASS.getPeriod(mPeriod));
-//        Log.d("mPeriod:"+mPeriod, ":"+(TYPE_CLASS.castToString(posId)));
-//    }
-//    public void setPeriodId(byte period){
-//        posId = (byte)((byte)(posId & TYPE_CLASS.PERIOD_CLEAR_MASK) | period);
-//    }
-//    public void setPosId(byte pos_){ posId = pos_; }
-//
-//    public int getDayId(){ return mDay; }
-//    public int getPeriodId(){ return mPeriod; }
-//    public byte getPosId(){ return posId; }
-//
-//    public static int[] convertPos(byte p){ // day, period
-//        int[] pos_ = new int[2];
-//        pos_[0] = p & 0x0F;
-//        pos_[1] = (p & 0xF0) >> 4;
-//        return pos_;
-//    }
-//
-//}

@@ -28,7 +28,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.mine.class_schedule.EditClassViewModel;
+import com.mine.class_schedule.AlarmIntegrator;
+import com.mine.class_schedule.Model.Alarm.TYPE_ALARM;
+import com.mine.class_schedule.ViewModel.EditClassViewModel;
 import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
@@ -67,12 +69,14 @@ public class EditClassActivity extends AppCompatActivity {
     private int alertNum=0;
     private FloatingActionButton compEditFab;
     private final int ID_ONLINE_EDIT_TEXT = 1212;
+    private AlarmIntegrator alarmIntegrator;
 
     private String  preClassName;
     private String  preClassPlace;
     private String  preOnlineUrl;
     private int     preAlertNum;
-    private long[]  preAlertTime;
+    private long[]  preAlarmTime;
+    private long[]  alertTime;
     private byte    classPos;
     private MyClass classData;
     private boolean classNameChangedFlag = false;
@@ -367,7 +371,9 @@ public class EditClassActivity extends AppCompatActivity {
     }
     private void initialize(){
         ignoredValue = new boolean[3];
-        preAlertTime = new long[3];
+        alertTime = new long[3];
+        preAlarmTime = new long[3];
+        alarmIntegrator = new AlarmIntegrator(this);
     }
     private boolean isDataChanged(){
         return (classNameChangedFlag || classPlaceChangedFlag || classOnlineUrlChangedFlag);
@@ -413,7 +419,8 @@ public class EditClassActivity extends AppCompatActivity {
         alertNum = preAlertNum;
 //        if (preAlertNum >= 0) System.arraycopy(preAlertTime, 0, preAlertTime, 0, preAlertNum);
 //      ->
-        preAlertTime = classData.getAlerts();
+        preAlarmTime = classData.getAlerts();
+        alertTime = classData.getAlerts();
 
         classPos = classData.getClassPos();
         Log.d(TAG, "[extract DATA] " +
@@ -423,7 +430,7 @@ public class EditClassActivity extends AppCompatActivity {
                          "\nOnline URL: " + preOnlineUrl +
                          "\nisOnline:   " + isOnline +
                          "\npreAlertNum:" + preAlertNum +
-                         "\npreAlerts = {"+preAlertTime[0]+", "+preAlertTime[1]+", "+preAlertTime[2]+"}");
+                         "\npreAlerts = {"+ alertTime[0]+", "+ alertTime[1]+", "+ alertTime[2]+"}");
         // others also get here;
     }
     private void setDisplayedValues(){
@@ -442,12 +449,12 @@ public class EditClassActivity extends AppCompatActivity {
             activeAlertPicker[i]=true;
             int spinnerPos;
             int time;
-            if(preAlertTime[i]<60) {//分前
+            if(alertTime[i]<60) {//分前
                 spinnerPos = 1;
-                time = (int)preAlertTime[i];
+                time = (int) alertTime[i];
             } else {
                 spinnerPos = 0;
-                time = (int)(preAlertTime[i]/60);
+                time = (int)(alertTime[i]/60);
             }
             setNumberPickerRange(i,spinnerPos);
             timeTypeSpinner[i].setSelection(spinnerPos);
@@ -477,7 +484,6 @@ public class EditClassActivity extends AppCompatActivity {
                 editClassPlace.setTextColor(getResources().getColor(R.color.black));
             }
             isOnline = true;
-            classOnlineUrlChangedFlag = true;
         } else {
             ifOnlineBox.setChecked(false);
             editClassPlace.setEnabled(true);
@@ -491,8 +497,8 @@ public class EditClassActivity extends AppCompatActivity {
             layoutEditOnlineUrl.setVisibility(View.GONE);
             editClassPlace.setText("");
             isOnline = false;
-            classOnlineUrlChangedFlag = true;
         }
+        classOnlineUrlChangedFlag = true;
     }
 
     private long[] getAlerts(){
@@ -511,6 +517,13 @@ public class EditClassActivity extends AppCompatActivity {
             alerts[i] = 99;
         }
         Arrays.sort(alerts);
+        if(alertNum < preAlertNum){
+            for(int i=alertNum;i<preAlertNum;i++){
+                Log.d(TAG, String.format("i:%d canceled", i));
+                alarmIntegrator.cancelAlarmOf(classData, i);
+            }
+        }
+
         return alerts;
     }
 

@@ -2,6 +2,7 @@ package com.mine.class_schedule.Model.Alarm;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -15,6 +16,9 @@ public interface AlarmDao {
 
     @Query("DELETE FROM alarm_table")
     void deleteAll();
+
+    @Query("DELETE FROM alarm_table WHERE alarmNumber = :Number")
+    void deleteAlarmOf(int Number);
 
     @Query("SELECT * FROM alarm_table ORDER BY alarmTime ASC ")
     LiveData<List<Alarm>> getAllAlarms();

@@ -35,8 +35,11 @@ public class HomeViewModel extends AndroidViewModel {
         mAllClasses = classRepository.getAllClasses();
         mAllAlarms = alarmRepository.getAllAlarms();
 
-        if(mAllClasses.equals(null)){
+        if(mAllClasses == null){
             Log.d(TAG, "mAllClasses is null");
+        }
+        if(mAllAlarms == null){
+            Log.d(TAG, "mAllAlarms is null");
         }
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
@@ -47,6 +50,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     LiveData<List<Alarm>> getAllAlarms() { return mAllAlarms; }
     public void insert (Alarm alarm){ alarmRepository.insert(alarm); }
+    public void deleteAlarmOf(int alarmNumber) { alarmRepository.deleteAlarmOf(alarmNumber);}
 
     public LiveData<String> getText() {
         return mText;

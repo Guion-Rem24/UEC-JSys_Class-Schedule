@@ -1,11 +1,10 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,7 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
+import com.mine.class_schedule.Service.LayerService;
 
 // https://gist.github.com/daichan4649/5352944
 // https://stackoverflow.com/questions/35327328/android-overlay-textview-on-lockscreen

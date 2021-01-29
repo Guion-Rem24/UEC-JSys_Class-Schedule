@@ -1,9 +1,6 @@
-package com.mine.class_schedule;
+package com.mine.class_schedule.Service;
 
-import android.animation.LayoutTransition;
-import android.app.ActivityManager;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,28 +10,17 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.mine.class_schedule.Receiver.ButtonClickedReceiver;
+import com.mine.class_schedule.Receiver.LockScreenStateReceiver;
+import com.mine.class_schedule.R;
 import com.mine.class_schedule.ui.dashboard.DashboardFragment;
-
-import org.w3c.dom.Text;
-
-import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
-import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE;
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-import static android.view.View.SYSTEM_UI_FLAG_VISIBLE;
 
 // https://stackoverflow.com/questions/44626611/show-a-popup-when-user-click-on-overlay-button
 // : intentにactionをつけ，BroadcastReceiverでonReceiveで受け取ることで，Listenすることができる（らしい）

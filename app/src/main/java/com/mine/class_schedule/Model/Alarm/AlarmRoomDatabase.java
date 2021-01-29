@@ -33,7 +33,7 @@ public abstract class AlarmRoomDatabase extends RoomDatabase {
         Log.d(TAG, "[getDatabase]");
         // Singleton
         if (INSTANCE == null) {
-            synchronized (ClassRoomDatabase.class) {
+            synchronized (AlarmRoomDatabase.class) {
                 if (INSTANCE == null) {
                     // create database
                     Log.d(TAG, "Database created");

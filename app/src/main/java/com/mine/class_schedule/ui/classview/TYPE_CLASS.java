@@ -14,7 +14,7 @@ public class TYPE_CLASS {
     static final byte PERIOD_5 = (byte) 0x50;
     static final byte PERIOD_6 = (byte) 0x60;
     public static String castToString(byte b){
-        return String.format("%8s", Integer.toBinaryString(b)).replace(' ', '0');
+        return String.format("%16s", Integer.toBinaryString(b)).replace(' ', '0');
     }
     public static byte getPeriod(int p){
         switch(p){
@@ -177,7 +177,7 @@ public class TYPE_CLASS {
             case PERIOD_4:
                 return 14;
             case PERIOD_5:
-                return 23; //test
+                return 22; //test
             case PERIOD_6:
                 return 17;
             default:
@@ -193,7 +193,7 @@ public class TYPE_CLASS {
             case PERIOD_4:
                 return 40;
             case PERIOD_5:
-                return 10; //test
+                return 30; //test
             case PERIOD_6:
                 return 45;
             default:
