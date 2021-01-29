@@ -204,6 +204,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/ripple_background"
             app:srcCompat="@android:drawable/ic_menu_edit"
+            android:elevation="30dp"
             android:clickable="true"
             android:focusable="true" />
         <!--    <Button-->

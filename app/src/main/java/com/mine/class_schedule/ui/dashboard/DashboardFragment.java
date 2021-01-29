@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
                             "\npreAlertNum:" + classData.getAlertNum() +
                             "\npreAlerts = {"+classData.getAlert1()+", "+classData.getAlert2()+", "+classData.getAlert3()+"}");
                     AlarmIntegrator integrator = new AlarmIntegrator(getContext());
-                    integrator.addAlarm(classData, 0);
+                    integrator.addAlarm(classData, System.currentTimeMillis());
                 }
                 // Receiverで受けてやってほうがいいかも
 //                if(!activatedlayerService) {

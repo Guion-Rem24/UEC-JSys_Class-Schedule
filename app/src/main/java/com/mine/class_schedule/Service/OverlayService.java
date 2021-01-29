@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.Receiver.ScreenOffReceiver;
+import com.mine.class_schedule.View.MainActivity;
 import com.mine.class_schedule.ui.classview.TYPE_CLASS;
 
 
@@ -36,6 +39,8 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
     private Button requestButton;
     private ImageButton cancelButton;
     private Button shareButton;
+
+    private MediaPlayer mediaPlayer;
 
     private ScreenOffReceiver mReceiver = null;
     private static WindowManager.LayoutParams params;
@@ -71,6 +76,8 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
             Log.d(TAG, "classData is null");
         }
 
+        // 初期化
+        initialize();
         // viewの取得
         findViews();
 
@@ -93,8 +100,8 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
 
         // WindowManagerによるViewの追加 ///////////////
         windowManager.addView(root_view, params);
+        audioSetup(); audioPlay();
 
-        Log.d(TAG, "[onStartCommand]");
         return super.onStartCommand(intent, flag, startId);
     }
 
@@ -114,6 +121,8 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
             unregisterReceiver(mReceiver);
             mReceiver = null;
         }
+
+        audioStop();
         super.onDestroy();
     }
 
@@ -267,8 +276,11 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         }
 
     }
-    private void findViews(){
+    private void initialize(){
+        mediaPlayer = new MediaPlayer();
         inflater = LayoutInflater.from(this);
+    }
+    private void findViews(){
         windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
         root_view = inflater.inflate(R.layout.overlay_layout, null);
@@ -392,4 +404,43 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
 //        });
 //        view.setOnTouchListener(new OnMovingListener());
     }
+    private void audioSetup(){
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.alarm_test);
+//        MainActivity.this.setVolumeControlStream(AudioManager.STREAM_ALARM);
+    }
+
+    private void audioPlay(){
+        if (mediaPlayer == null) {
+//            // audio ファイルを読出し
+//            if (audioSetup()){
+//                Toast.makeText(getApplication(), "Rread audio file", Toast.LENGTH_SHORT).show();
+//            }
+//            else{
+                Toast.makeText(getApplication(), "Error: read audio file", Toast.LENGTH_SHORT).show();
+                return;
+//            }
+        }
+        else{
+            // 繰り返し再生する場合
+//            mediaPlayer.stop();
+//            mediaPlayer.reset();
+            // リソースの解放
+//            mediaPlayer.release();
+        }
+        mediaPlayer.start();
+
+        mediaPlayer.setOnCompletionListener(mp -> {
+            Log.d(TAG, "[audio Completion]");
+            mediaPlayer.start();
+        });
+    }
+
+    private void audioStop(){
+        if(mediaPlayer == null) return;
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
+
 }

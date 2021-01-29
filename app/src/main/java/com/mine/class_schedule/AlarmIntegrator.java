@@ -45,6 +45,17 @@ public class AlarmIntegrator {
                 "\n on "+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.DAY_OF_MONTH)+"("+calendar.get(Calendar.DAY_OF_WEEK)+")");
     }
 
+    public void addAlarm(MyClass classData, long currentTimeMillis){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(currentTimeMillis);
+        calendar.add(Calendar.SECOND, 10);
+        if(classData == null) throw  new NullPointerException();
+        pendingIntent = this.getPendingIntent(classData,0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.d(TAG, "Set Test Alarm: " + calendar.get(Calendar.HOUR_OF_DAY) + ":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+
+                "\n on "+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.DAY_OF_MONTH)+"("+calendar.get(Calendar.DAY_OF_WEEK)+")");
+    }
+
     private PendingIntent getPendingIntent(MyClass classData, int alarmNumber){
 //        Intent intent = new Intent(context, OverlayService.class);
 //        return PendingIntent
@@ -54,7 +65,9 @@ public class AlarmIntegrator {
 //                PendingIntent.FLAG_UPDATE_CURRENT);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         if(classData != null) {
-            intent.putExtra("ReceivedClassData", classData);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("ClassData", classData);
+            intent.putExtra("bundle", bundle);
         }else{
             Log.d(TAG,"classData is null");
             throw new NullPointerException();

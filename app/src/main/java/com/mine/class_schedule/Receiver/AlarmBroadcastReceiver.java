@@ -3,6 +3,7 @@ package com.mine.class_schedule.Receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.mine.class_schedule.Model.MyClass.MyClass;
@@ -15,9 +16,12 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public AlarmBroadcastReceiver(){ }
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "[onReceive] ACTION: " + intent.getAction() + ", Context:" + context.getClass().toString());
-        MyClass classData = (MyClass) intent.getSerializableExtra("ReceivedClassData");
-        if (classData == null) throw new NullPointerException();
+        Log.d(TAG, "[onReceive] ACTION: " + intent.getAction() + ", intent.getType():" + intent.getType());
+
+        Bundle bundle = intent.getBundleExtra("bundle");
+        MyClass classData = (MyClass) bundle.getSerializable("ClassData");
+        if(classData == null) throw new NullPointerException();
+
 
         Log.d(TAG, "[extract DATA] " +
                 "\nclassPos:   " + TYPE_CLASS.getPeriodString(classData.getClassPos()) + " on " + TYPE_CLASS.getDayString(classData.getClassPos()) +

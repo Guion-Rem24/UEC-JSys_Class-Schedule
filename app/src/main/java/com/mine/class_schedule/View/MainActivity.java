@@ -2,6 +2,7 @@ package com.mine.class_schedule.View;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -88,6 +90,8 @@ public class MainActivity extends AppCompatActivity{
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
         pagerAdapter = new ViewPagerAdapter(this);
 //        For ViewPager
         //  viewPager = new BottomNavigationViewPager(getApplicationContext());
@@ -236,6 +240,27 @@ public class MainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed(){
+        if(viewPager.getCurrentItem() == FragNum.DashBoard || viewPager.getCurrentItem() == FragNum.Notification){
+            viewPager.setCurrentItem(FragNum.Home, true);
+            toolbar.setTitle("Home");
+        } else if(viewPager.getCurrentItem() == FragNum.Home) {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setIcon(R.drawable.ic_baseline_warning_24)
+                    .setTitle("確認")
+                    .setMessage("アプリを終了しますか？")
+                    .setPositiveButton("はい", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("いいえ", null)
+                    .show();
+        }
+    }
+
     public void setViewModel(HomeViewModel vm){
         homeViewModel = vm;
     }
@@ -360,7 +385,7 @@ public class MainActivity extends AppCompatActivity{
         private List<Fragment> mFrags;
         private LayoutInflater inflater;
 
-        private static final String TAG="ViewPagerRecyclerAdapter";
+        private static final String TAG="ViewPagerRecAdapter";
 
 
 //        @Override
