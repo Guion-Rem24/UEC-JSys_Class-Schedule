@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG,"classes is null");
                 }
                 classList = classes;
-                classTableView.setClassData();
+                classTableView.setClassData(true);
                 // UI update
                 classTableView.updateClassesUI(classes);
 

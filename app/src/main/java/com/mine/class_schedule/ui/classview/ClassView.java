@@ -31,7 +31,9 @@ import androidx.fragment.app.FragmentActivity;
 import com.mine.class_schedule.Model.MyClass.MyClass;
 import com.mine.class_schedule.R;
 import com.mine.class_schedule.View.EditClassActivity;
+import com.mine.class_schedule.View.EditClassFromOutsideActivity;
 import com.mine.class_schedule.View.MainActivity;
+import com.mine.class_schedule.ViewModel.EditClassFromOutsideViewModel;
 
 public class ClassView extends ConstraintLayout implements View.OnClickListener{
 
@@ -54,6 +56,10 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     private int mWidth;
     private int mHeight;
 
+    private boolean outsideActivityFlag = false;
+
+    private EditClassFromOutsideViewModel viewModel;
+
     public ClassView(Context context) {
         super(context);
         mContext = context;
@@ -67,6 +73,7 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     }
 
     private void init(Context context){
+        Log.d(TAG, "[init]");
         setOnClickListener(this);
         posId = 0x00;
 
@@ -157,12 +164,20 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Log.d(TAG, "[onClick]");
-        Intent intent = new Intent(mContext, EditClassActivity.class);
+        if(!outsideActivityFlag){
+            Intent intent = new Intent(mContext, EditClassActivity.class);
 
-        intent.putExtra("ClassPos", (byte)posId);
-        intent.putExtra("ClassData", classData);
+            intent.putExtra("ClassPos", (byte) posId);
+            intent.putExtra("ClassData", classData);
 
-        ((FragmentActivity) mContext).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_CLASS);
+            ((FragmentActivity) mContext).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_CLASS);
+        } else {
+            Log.d(TAG,"extra onClick");
+            viewModel.setClassPos(posId);
+//            Intent intent = new Intent(mContext, EditClassFromOutsideActivity.class);
+//            intent.putExtra("ClassPos", (byte)posId);
+//            ((FragmentActivity) mContext).startActivityForResult(intent, EditClassFromOutsideActivity.REQUEST_CODE_SEND_CLASS_POS);
+        }
     }
 
     public void setDayId(int day){
@@ -184,15 +199,12 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     public void setClassData(int day, int period){
         setDayId(day);
         setPeriodId(period);
-        if(((MainActivity) mContext).getHomeViewModel() == null) Log.d(TAG, "HomeViewModel is null");
-
     }
 
-    public void setClass(){
-        if((((MainActivity) mContext)).getHomeFragment().getMyClass(posId) == null){
-            Log.d(TAG, posId+": homeFragment().getMyClass() is null");
+    public void setClass(boolean setDataFlag){
+        if(setDataFlag){
+            classData = (((MainActivity) mContext)).getHomeFragment().getMyClass(posId);
         }
-        classData = (((MainActivity) mContext)).getHomeFragment().getMyClass(posId);
     }
 
     public int getDayId(){ return mDay; }
@@ -254,6 +266,17 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
         public void getOutline(View view, Outline outline) {
             view.setElevation(-1000f);
         }
+    }
+
+    public void updateOnClickListener(View.OnClickListener listener){
+        Log.d(TAG,"[updateOnClickListener]");
+        outsideActivityFlag = true;
+        this.setOnClickListener(listener);
+    }
+
+    public void setViewModel(EditClassFromOutsideViewModel viewModel){
+        Log.d(TAG, "[setViewModel]");
+        this.viewModel = viewModel;
     }
 }
 

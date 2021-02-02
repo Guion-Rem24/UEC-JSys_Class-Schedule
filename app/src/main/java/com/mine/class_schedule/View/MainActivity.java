@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity{
                     "\nisOnline:   " + classData.getOnlineFlag() +
                     "\npreAlertNum:" + classData.getAlertNum() +
                     "\npreAlerts = {"+preAlertTime[0]+", "+preAlertTime[1]+", "+preAlertTime[2]+"}");
-            // TODO: repositoryからinsert
+
             homeViewModel.insert(classData);
             toolbar.setTitle("Home");
             viewPager.setCurrentItem(FragNum.Home, false);

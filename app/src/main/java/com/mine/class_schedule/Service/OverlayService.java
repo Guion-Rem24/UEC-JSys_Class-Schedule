@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.media.AudioManager;
@@ -372,8 +373,17 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
 
         if(shareButton != null){
             shareButton.setOnClickListener(v -> {
-                // TODO: 共有機能の実装
                 Log.d(TAG,"[onClick] shareButton");
+                windowManager.removeView(root_view);
+                audioStop();
+
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, classData.getOnlineUrl());
+                shareIntent.setType("text/html");
+                Intent sendIntent = Intent.createChooser(shareIntent, "URLの共有...");
+                sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(sendIntent);
             });
         }
 

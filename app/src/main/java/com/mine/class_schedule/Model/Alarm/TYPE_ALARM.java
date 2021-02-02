@@ -54,7 +54,7 @@ public class TYPE_ALARM {
         return getNewCalendar(timeMillis).get(Calendar.DAY_OF_MONTH);
     }
 
-    private static String getDayOfWeek(long timeMillis){
+    public static String getDayOfWeek(long timeMillis){
         switch (getNewCalendar(timeMillis).get(Calendar.DAY_OF_WEEK)){
 //            case 1:
 //                return "(日)";

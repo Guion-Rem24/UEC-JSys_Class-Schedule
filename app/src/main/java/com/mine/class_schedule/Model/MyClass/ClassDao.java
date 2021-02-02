@@ -1,6 +1,7 @@
 package com.mine.class_schedule.Model.MyClass;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -23,7 +24,7 @@ public interface ClassDao {
     LiveData<List<MyClass>> getAllClasses();
 
     @Query("SELECT * FROM class_table WHERE classPos = :posId")
-    MyClass getMyClass(int posId);
+    LiveData<MyClass> getMyClass(int posId);
     
 //    @Query("SELECT classPos FROM class_table")
 //    MyClass getMyClass(int pos);

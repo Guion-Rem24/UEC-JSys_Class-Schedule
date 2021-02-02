@@ -2,15 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mine.class_schedule">
     <!-- 電源オン検知 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- For Overlay -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- For Overlay -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="INTERNAL_SYSTEM_WINDOW" />
-    <!-- For Overlay over API 28 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <!-- For Vibration -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="INTERNAL_SYSTEM_WINDOW" /> <!-- For Overlay over API 28 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- For Vibration -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -19,18 +15,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoActionBar">
+        <activity
+            android:name=".View.EditClassFromOutsideActivity"
+            android:label="URLの取得" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="hogehoge-scheme"
+                    android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity android:name=".View.EditClassActivity" />
 
         <receiver
             android:name=".Receiver.ButtonClickedReceiver"
             android:enabled="true"
             android:exported="true" />
-
-        <receiver android:name=".Receiver.ScreenOffReceiver"
+        <receiver
+            android:name=".Receiver.ScreenOffReceiver"
             android:enabled="true"
             android:exported="true" />
-
-        <receiver android:name=".Receiver.AlarmBroadcastReceiver"
+        <receiver
+            android:name=".Receiver.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 
@@ -38,7 +51,8 @@
             android:name=".Service.LayerService"
             android:enabled="true"
             android:exported="true" />
-        <service android:name=".Service.OverlayService"
+        <service
+            android:name=".Service.OverlayService"
             android:enabled="true"
             android:exported="true" />
         <service
@@ -56,7 +70,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

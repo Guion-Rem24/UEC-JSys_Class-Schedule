@@ -33,10 +33,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 "\npreAlerts = {" + classData.getAlert1() + ", " + classData.getAlert2() + ", " + classData.getAlert3() + "}");
 
         Intent serviceIntent = new Intent(context, OverlayService.class);
-        if (classData != null) {
-            Log.d(TAG, "put Extra of classData");
-            serviceIntent.putExtra("ClassData", classData);
-        }
+        serviceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Log.d(TAG, "put Extra of classData");
+        serviceIntent.putExtra("ClassData", classData);
         context.startService(serviceIntent);
     }
 }

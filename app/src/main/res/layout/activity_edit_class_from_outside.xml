@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_edit_class_outside"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".View.EditClassFromOutsideActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/editclass_outside_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/editclass_outside_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ToolbarTheme">
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edittext_outside_online_url_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/edittext_outside_place_layout"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edittext_outside_online_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:hint="オンライン講義のURL..."
+                        android:inputType="textUri|textMultiLine"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <include
+                    layout="@layout/alert_layout"
+                    android:id="@+id/edit_outside_alert1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/text_outside_alert"
+                    app:layout_constraintTop_toBottomOf="@+id/text_outside_alert"
+                    android:visibility="gone"
+                    />
+                <include
+                    layout="@layout/alert_layout"
+                    android:id="@+id/edit_outside_alert2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/edit_outside_alert1"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_outside_alert1"
+                    android:visibility="gone"
+                    />
+                <include
+                    layout="@layout/alert_layout"
+                    android:id="@+id/edit_outside_alert3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/edit_outside_alert2"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_outside_alert2"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/text_selected_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="0sp"
+                    android:textSize="25dp"
+                    tools:text="△△曜日 〇〇限目"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/text_outside_classname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="0sp"
+                    android:text="講義名"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/text_selected_class" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editext_outside_classname_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/text_outside_classname">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editext_outside_classname"
+                        android:layout_width="match_parent"
+                        android:layout_height="70sp"
+                        android:textSize="15sp"
+                        android:hint="講義名を入力..." />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <CheckBox
+                    android:id="@+id/checkBox_outside_ifOnline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="オンライン講義"
+                    android:layout_margin="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editext_outside_classname_layout" />
+
+                <TextView
+                    android:id="@+id/text_outside_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="0sp"
+                    android:text="場所"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/checkBox_outside_ifOnline" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edittext_outside_place_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/text_outside_place"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:background="@color/white">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edittext_outside_place"
+                        android:layout_width="match_parent"
+                        android:layout_height="50sp"
+                        android:textSize="15sp"
+                        android:hint="講義場所..." />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/text_outside_alert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="0sp"
+                    android:text="通知"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edittext_outside_online_url_layout" />
+
+                <!--    <com.google.android.material.textfield.TextInputLayout-->
+                <!--        android:id="@+id/edittext_alert_layout"-->
+                <!--        android:layout_width="match_parent"-->
+                <!--        android:layout_height="wrap_content"-->
+                <!--        app:layout_constraintTop_toBottomOf="@+id/text_alert"-->
+                <!--        app:layout_constraintStart_toStartOf="parent"-->
+                <!--        android:background="@color/white">-->
+
+                <!--        <com.google.android.material.textfield.TextInputEditText-->
+                <!--            android:id="@+id/edittext_alert"-->
+                <!--            android:layout_width="match_parent"-->
+                <!--            android:layout_height="50sp"-->
+                <!--            android:textSize="15sp"-->
+                <!--            android:hint="講義場所..." />-->
+                <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+                <ImageButton
+                    android:id="@+id/button_outside_add_alert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/edit_outside_alert3"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_outside_alert3"
+                    android:paddingBottom="20dp"
+                    android:src="@drawable/ic_baseline_add_24"
+                    android:backgroundTint="@android:color/transparent"
+                    android:background="@color/white"
+                    />
+                <Button
+                    android:id="@+id/button_sample"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/edittext_outside_online_url_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_outside_finish_editing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/ripple_background"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            android:elevation="30dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    <com.google.android.material.navigation.NavigationView-->
+    <!--        android:id="@+id/navigationView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:fitsSystemWindows="true"-->
+    <!--        app:menu="@menu/drawer"-->
+    <!--        android:layout_gravity="start"/>-->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

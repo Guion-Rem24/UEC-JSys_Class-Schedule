@@ -64,6 +64,7 @@ public class AlarmIntegrator {
 //                intent,
 //                PendingIntent.FLAG_UPDATE_CURRENT);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if(classData != null) {
             Bundle bundle = new Bundle();
             bundle.putSerializable("ClassData", classData);
@@ -77,7 +78,7 @@ public class AlarmIntegrator {
                 .getBroadcast(context,
                 generateRequestCode(classData, alarmNumber),
                 intent,
-                0);
+                PendingIntent.FLAG_ONE_SHOT);
     }
 
     private int generateRequestCode(MyClass classData, int number){

@@ -95,10 +95,10 @@ public class ClassTableView extends TableLayout {
         }
     }
 
-    public void setClassData(){
+    public void setClassData(boolean setDataFlag){
         for(ClassView[] c_ : classes){
             for(ClassView c : c_){
-                c.setClass();
+                c.setClass(setDataFlag);
             }
         }
     }
@@ -107,6 +107,14 @@ public class ClassTableView extends TableLayout {
         for(ClassView[] c_ :classes){
             for(ClassView c : c_){
                 c.setViewSize(width/6, height/5);
+            }
+        }
+    }
+
+    public void updateOnClickListeners(View.OnClickListener listener){
+        for(ClassView[] c_ :classes){
+            for(ClassView c : c_){
+                c.updateOnClickListener(listener);
             }
         }
     }
