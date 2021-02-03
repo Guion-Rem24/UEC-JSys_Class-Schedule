@@ -40,7 +40,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     public void onBindViewHolder(@NonNull AlarmViewHolder holder, int position) {
         if(mAlarms != null){
             Alarm current = mAlarms.get(position);
-            String name = String.format("%s: %s %s", current.getClassName(),
+            String name = String.format("%s\n(%s %s)", current.getClassName(),
                     TYPE_CLASS.getDayString(current.getAlarmOfClass()),
                     TYPE_CLASS.getPeriodString(current.getAlarmOfClass()));
             holder.classNameView.setText(name);

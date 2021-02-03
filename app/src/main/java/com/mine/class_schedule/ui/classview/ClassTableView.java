@@ -86,18 +86,29 @@ public class ClassTableView extends TableLayout {
             classes[pos[1]][pos[0]].setName(name);
             String place = c.getClassPlace();
             if(TextUtils.isEmpty(place)) place = "place";
-            if(c.getOnlineFlag()) place = "Online";
-            if(c.getOnlineFlag()){
-                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
-                    classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.red));
-                } else {
-                    classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.red, null));
-                }
-            } else {
-                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+            else {
+                if (c.getOnlineFlag()) place = "Online";
+                else place = "offline";
+            }
+            if(place.equals("place")){
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                     classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.disableColor));
                 } else {
                     classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.disableColor, null));
+                }
+            } else {
+                if (c.getOnlineFlag()) {
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+                        classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.red));
+                    } else {
+                        classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.red, null));
+                    }
+                } else {
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+                        classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.teal_200));
+                    } else {
+                        classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.teal_200, null));
+                    }
                 }
             }
         }

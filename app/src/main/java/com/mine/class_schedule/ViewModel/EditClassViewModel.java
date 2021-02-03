@@ -34,4 +34,5 @@ public class EditClassViewModel extends AndroidViewModel {
     public LiveData<List<MyClass>> getAllClasses() { return mAllClasses; }
     public LiveData<List<Alarm>> getAllAlarm() { return mAllAlarms; }
     public void deleteAlarmOf(int alarmNumber) { alarmRepository.deleteAlarmOf(alarmNumber); }
+    public void insert(MyClass mClass) { classRepository.insert(mClass); }
 }

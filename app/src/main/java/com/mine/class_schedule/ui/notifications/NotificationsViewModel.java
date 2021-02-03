@@ -29,7 +29,7 @@ public class NotificationsViewModel extends AndroidViewModel {
         super(application);
         Log.d(TAG, "[Constructor]");
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+//        mText.setValue("This is notifications fragment");
 
         classRepository = new ClassRepository(application);
         mAllClasses = classRepository.getAllClasses();

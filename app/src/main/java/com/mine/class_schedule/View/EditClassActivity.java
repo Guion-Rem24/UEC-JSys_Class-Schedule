@@ -68,6 +68,7 @@ public class EditClassActivity extends AppCompatActivity {
     private boolean[] activeAlertPicker;
     private int alertNum=0;
     private FloatingActionButton compEditFab;
+    private FloatingActionButton deleteDataFab;
     private final int ID_ONLINE_EDIT_TEXT = 1212;
     private AlarmIntegrator alarmIntegrator;
 
@@ -248,6 +249,38 @@ public class EditClassActivity extends AppCompatActivity {
             }
         });
 
+        /** 消去ボタン */
+        deleteDataFab.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                new AlertDialog.Builder(EditClassActivity.this)
+                        .setTitle("注意")
+                        .setIcon(R.drawable.ic_baseline_warning_24)
+                        .setMessage("全データを消去します。\n復元されませんが，よろしいですか？")
+                        .setPositiveButton("はい", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                classData.setClassName("");
+                                classData.setClassPlace("");
+                                classData.setOnlineUrl("");
+                                classData.setAlertNum(0);
+                                long[] empty = new long[3];
+                                empty[0] = 99;
+                                empty[1] = 99;
+                                empty[2] = 99;
+                                classData.setAlerts(empty);
+                                Intent intent = new Intent();
+                                intent.putExtra("ClassData", classData);
+                                setResult(RESULT_OK,intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("いいえ", null)
+                        .create()
+                        .show();
+            }
+        });
+
 
         /**
          * 編集完了ボタン押下時
@@ -355,6 +388,7 @@ public class EditClassActivity extends AppCompatActivity {
         layoutEditName = findViewById(R.id.editext_classname_layout);
         layoutEditPlace = findViewById(R.id.edittext_place_layout);
         layoutEditOnlineUrl = findViewById(R.id.edittext_online_url_layout);
+        deleteDataFab = findViewById(R.id.fab_delete_editing);
         compEditFab = findViewById(R.id.fab_finish_editing);
         addAlertButton = findViewById(R.id.button_add_alert);
         ifOnlineBox = (CheckBox) findViewById(R.id.checkBox_ifOnline);

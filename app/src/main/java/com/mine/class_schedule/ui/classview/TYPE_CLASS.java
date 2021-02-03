@@ -177,7 +177,7 @@ public class TYPE_CLASS {
             case PERIOD_4:
                 return 14;
             case PERIOD_5:
-                return 22; //test
+                return 17; //test
             case PERIOD_6:
                 return 17;
             default:
@@ -193,7 +193,7 @@ public class TYPE_CLASS {
             case PERIOD_4:
                 return 40;
             case PERIOD_5:
-                return 30; //test
+                return 55; //test
             case PERIOD_6:
                 return 45;
             default:
