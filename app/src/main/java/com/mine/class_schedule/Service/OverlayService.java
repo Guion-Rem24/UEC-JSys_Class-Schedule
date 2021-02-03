@@ -1,5 +1,6 @@
 package com.mine.class_schedule.Service;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mine.class_schedule.Model.MyClass.MyClass;
@@ -36,6 +38,7 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
     private static WindowManager windowManager;
     private static View view;
     private static View root_view;
+    private TextView classNameView;
     private LayoutInflater inflater;
     private Button requestButton;
     private ImageButton cancelButton;
@@ -81,6 +84,8 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
         initialize();
         // viewの取得
         findViews();
+
+        classNameView.setText(classData.getClassName());
 
         displaySize = new Point();
         windowManager.getDefaultDisplay().getSize(displaySize);
@@ -286,6 +291,7 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
 
         root_view = inflater.inflate(R.layout.overlay_layout, null);
         view = root_view.findViewById(R.id.overlay_layout);
+        classNameView = view.findViewById(R.id.text_overlay);
         requestButton = view.findViewById(R.id.request_button_overlay);
         cancelButton = view.findViewById(R.id.cancel_button_overlay);
         shareButton = view.findViewById(R.id.share_button_overlay);
@@ -355,8 +361,13 @@ public class OverlayService extends Service{//implements View.OnTouchListener, V
                         try {
                             getApplicationContext().startActivity(toChrome);
                         } catch (ActivityNotFoundException ex) {
-                            toChrome.setPackage(null);
-                            getApplicationContext().startActivity(toChrome);
+                            try{
+                                toChrome.setPackage(null);
+                                getApplicationContext().startActivity(toChrome);
+                            } catch (ActivityNotFoundException e){
+                                Toast.makeText(getApplicationContext(), "講義URLが不適切です。終了します。", Toast.LENGTH_LONG).show();
+                                onDestroy();
+                            }
                         }
                     }
 //                stopSelf();

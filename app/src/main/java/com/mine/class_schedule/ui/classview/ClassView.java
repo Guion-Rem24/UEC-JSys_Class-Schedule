@@ -95,40 +95,53 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
 //                        outline.setRect(0,0,view.getWidth(),view.getHeight());
 //                    }
 //                });
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) { // API 26 未満
-                    vibrator.vibrate(300);
-                } else {
-                    VibrationEffect vibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE);
-                    vibrator.vibrate(vibrationEffect);
-                }
-                if(classData.getOnlineFlag()){
-                    new AlertDialog.Builder(mContext)
-                            .setIcon(R.drawable.ic_baseline_connect_without_contact_24)
-                            .setTitle("オンライン講義へ接続")
-                            .setMessage(String.format("%s のオンライン講義に接続しますか？", classData.getClassName()))
-                            .setPositiveButton("はい", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if(classData.getOnlineUrl().equals("") || classData.getOnlineUrl() == null){
-                                        Toast.makeText(mContext, "オンライン講義のURLを設定してください。",Toast.LENGTH_LONG).show();
-                                    }
-                                    else {
-                                        Intent toChrome = new Intent(Intent.ACTION_VIEW, Uri.parse(classData.getOnlineUrl()));
-                                        toChrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        toChrome.setPackage("com.android.chrome");
-                                        try {
-                                            mContext.startActivity(toChrome);
-                                        } catch (ActivityNotFoundException ex) {
-                                            toChrome.setPackage(null);
-                                            mContext.startActivity(toChrome);
+                if(!outsideActivityFlag){
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) { // API 26 未満
+                        vibrator.vibrate(300);
+                    } else {
+                        VibrationEffect vibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE);
+                        vibrator.vibrate(vibrationEffect);
+                    }
+                    if (classData.getOnlineFlag()) {
+                        new AlertDialog.Builder(mContext)
+                                .setIcon(R.drawable.ic_baseline_connect_without_contact_24)
+                                .setTitle("オンライン講義へ接続")
+                                .setMessage(String.format("%s のオンライン講義に接続しますか？", classData.getClassName()))
+                                .setPositiveButton("はい", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (classData.getOnlineUrl().equals("") || classData.getOnlineUrl() == null) {
+                                            Toast.makeText(mContext, "オンライン講義のURLを設定してください。", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Intent toChrome = new Intent(Intent.ACTION_VIEW, Uri.parse(classData.getOnlineUrl()));
+                                            toChrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            toChrome.setPackage("com.android.chrome");
+                                            try {
+                                                mContext.startActivity(toChrome);
+                                            } catch (ActivityNotFoundException ex) {
+                                                toChrome.setPackage(null);
+                                                mContext.startActivity(toChrome);
+                                            }
                                         }
                                     }
-                                }
-                            })
-                            .setNegativeButton("いいえ", null)
-                            .show();
-                } else {
-                    Toast.makeText(mContext, "対面講義です", Toast.LENGTH_LONG).show();
+                                })
+                                .setNegativeButton("いいえ", null)
+                                .setNeutralButton("共有", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent shareIntent = new Intent();
+                                        shareIntent.setAction(Intent.ACTION_SEND);
+                                        shareIntent.putExtra(Intent.EXTRA_TEXT, classData.getOnlineUrl());
+                                        shareIntent.setType("text/plain");
+                                        Intent sendIntent = Intent.createChooser(shareIntent, "URLの共有...");
+                                        sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        mContext.startActivity(sendIntent);
+                                    }
+                                })
+                                .show();
+                    } else {
+                        Toast.makeText(mContext, "対面講義です", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         };
@@ -204,6 +217,9 @@ public class ClassView extends ConstraintLayout implements View.OnClickListener{
     public void setClass(boolean setDataFlag){
         if(setDataFlag){
             classData = (((MainActivity) mContext)).getHomeFragment().getMyClass(posId);
+            if(classData.getOnlineFlag()){
+                placeView.setTextColor(getResources().getColor(R.color.red));
+            }
         }
     }
 

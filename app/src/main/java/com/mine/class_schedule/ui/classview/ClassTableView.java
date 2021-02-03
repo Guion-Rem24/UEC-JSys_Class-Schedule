@@ -87,10 +87,18 @@ public class ClassTableView extends TableLayout {
             String place = c.getClassPlace();
             if(TextUtils.isEmpty(place)) place = "place";
             if(c.getOnlineFlag()) place = "Online";
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.material_on_primary_disabled, null));
+            if(c.getOnlineFlag()){
+                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+                    classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.red));
+                } else {
+                    classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.red, null));
+                }
             } else {
-                classes[pos[1]][pos[0]].setPlace(place, R.color.material_on_background_disabled);
+                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+                    classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.disableColor));
+                } else {
+                    classes[pos[1]][pos[0]].setPlace(place, getResources().getColor(R.color.disableColor, null));
+                }
             }
         }
     }

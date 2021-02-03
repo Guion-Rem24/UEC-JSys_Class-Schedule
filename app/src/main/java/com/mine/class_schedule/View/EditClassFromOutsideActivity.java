@@ -94,7 +94,11 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
 
 
     private EditClassFromOutsideViewModel viewModel;
+    private AlertDialog.Builder builder;
     private AlertDialog dialog;
+
+    private View layout;
+    private PopupClassTableView table;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,12 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
                 Log.d(TAG, "[getAction] ACTION_VIEW");
                 preOnlineUrl = intent.getCharSequenceExtra(Intent.EXTRA_TEXT).toString();
                 break;
+            case Intent.ACTION_PROCESS_TEXT: {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Log.d(TAG, "[getAction] ACTION_PROCESS_TEXT");
+                    preOnlineUrl = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString();
+                }
+            }
             default:
                 break;
         }
@@ -200,7 +210,6 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
             }
         });
 
-
         editOnlineUrl.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -263,6 +272,12 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
                 classOnlineUrlChangedFlag = true;
                 Log.d(TAG, "Fab [on Click]");
                 Intent replyIntent = new Intent(getApplicationContext(), MainActivity.class);
+                if(classPos == (byte) 0xFF){
+                    setDialogBuilder();
+                    dialog = builder.create();
+                    dialog.show();
+                    return;
+                }
                 classData.setClassPos(classPos);
                 if(classNameChangedFlag){
                     if( !TextUtils.isEmpty(editClassName.getText()) ){
@@ -362,30 +377,11 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
         setDisplayedValues();
 
         /** test */
-        Button sampleButton = findViewById(R.id.button_sample);
+        ImageButton sampleButton = findViewById(R.id.button_sample);
         sampleButton.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                View layout = inflater.inflate(R.layout.popup_layout,null);
-                PopupClassTableView table = layout.findViewById(R.id.popup_classtable_view);
-                table.setViewModel(viewModel);
-                table.updateOnClickListeners(new View.OnClickListener(){
-                            @Override
-                            public void onClick(View v){
-                                Log.d(TAG,"View: "+v.getClass().toString());
-                            }
-                        });
-
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditClassFromOutsideActivity.this);
-                builder.setView(layout)
-                        .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                return;
-                            }
-                        });
+                setDialogBuilder();
                 dialog = builder.create();
                 dialog.show();
             }
@@ -428,6 +424,7 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
                 if(aByte == (byte)0xFF){
                     selectedClassName.setText("講義が選択されていません");
                     selectedClassName.setTextColor(getResources().getColor(R.color.disableColor));
+                    classPos = (byte) 0xFF;
                 } else {
                     // すでに記録されている場合
 
@@ -517,7 +514,29 @@ public class EditClassFromOutsideActivity extends AppCompatActivity {
         preAlarmTime = new long[3];
         alarmIntegrator = new AlarmIntegrator(this);
         viewModel = new ViewModelProvider(this).get(EditClassFromOutsideViewModel.class);
+        builder = new AlertDialog.Builder(EditClassFromOutsideActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            layout = inflater.inflate(R.layout.popup_layout,null);
+            table = layout.findViewById(R.id.popup_classtable_view);
+            table.setViewModel(viewModel);
+            table.updateOnClickListeners(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    Log.d(TAG,"View: "+v.getClass().toString());
+                }
+            });
     }
+
+    private void setDialogBuilder(){
+        builder.setView(layout)
+                .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+    }
+
 
     private boolean isDataChanged(){
         return (classNameChangedFlag || classPlaceChangedFlag || classOnlineUrlChangedFlag);

@@ -93,6 +93,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
+                <ImageButton
+                    android:id="@+id/button_sample"
+                    android:src="@drawable/ic_baseline_calendar_view_month_24"
+                    android:background="@null"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="0sp"
+                    app:layout_constraintTop_toBottomOf="@+id/text_selected_class"
+                    app:layout_constraintStart_toEndOf="@+id/text_selected_class"/>
+
                 <TextView
                     android:id="@+id/text_outside_classname"
                     android:layout_width="wrap_content"
@@ -199,13 +210,6 @@
                     android:backgroundTint="@android:color/transparent"
                     android:background="@color/white"
                     />
-                <Button
-                    android:id="@+id/button_sample"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/edittext_outside_online_url_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
